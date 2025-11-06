@@ -4,7 +4,7 @@
 
 {% block extra_head %}
 <style>
-/* Mobile-first responsive design for dashboard */
+/* Dashboard Styles */
 :root {
     --primary-color: #3498db;
     --secondary-color: #2c3e50;
@@ -19,7 +19,6 @@
     --transition: all 0.3s ease;
 }
 
-/* Mobile-first base styles */
 .dashboard-container {
     padding: 1rem;
     max-width: 100%;
@@ -101,7 +100,6 @@
     text-align: center;
 }
 
-/* Upload Area - Mobile Optimized */
 .upload-area {
     border: 3px dashed var(--primary-color);
     border-radius: var(--border-radius);
@@ -147,7 +145,6 @@
     display: none;
 }
 
-/* Buttons - Touch Friendly */
 .btn {
     background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
     color: white;
@@ -179,7 +176,6 @@
     align-items: center;
 }
 
-/* Statistics Grid - Mobile First */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -213,7 +209,6 @@
     font-size: 0.9rem;
 }
 
-/* Results Section */
 .result-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -279,16 +274,10 @@
     border: 2px solid #dc3545;
 }
 
-/* Table - Mobile Responsive */
-.table-responsive {
-    overflow-x: auto;
-    margin-top: 1rem;
-}
-
 .history-table {
     width: 100%;
-    min-width: 600px;
     border-collapse: collapse;
+    margin-top: 1rem;
 }
 
 .history-table th,
@@ -303,11 +292,8 @@
     background: var(--light-gray);
     font-weight: 600;
     color: var(--secondary-color);
-    position: sticky;
-    top: 0;
 }
 
-/* Alerts */
 .alert {
     padding: 1rem;
     border-radius: var(--border-radius);
@@ -333,7 +319,6 @@
     color: #0c5460;
 }
 
-/* Forms - Touch Friendly */
 .feedback-form {
     background: var(--light-gray);
     padding: 1.5rem;
@@ -377,7 +362,6 @@
     min-height: 120px;
 }
 
-/* Rating System */
 .rating-group {
     display: flex;
     gap: 0.5rem;
@@ -400,7 +384,6 @@
     transform: scale(1.1);
 }
 
-/* Fairness Metrics */
 .fairness-metrics {
     display: grid;
     grid-template-columns: 1fr;
@@ -436,25 +419,12 @@
     border-left: 4px solid;
 }
 
-.bias-low {
-    background: #d4edda;
-    border-color: #28a745;
-    color: #155724;
-}
-
 .bias-medium {
     background: #fff3cd;
     border-color: #ffc107;
     color: #856404;
 }
 
-.bias-high {
-    background: #f8d7da;
-    border-color: #dc3545;
-    color: #721c24;
-}
-
-/* Loading Animation */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -470,32 +440,7 @@
     margin: 1rem auto;
 }
 
-/* Tablet Responsive */
-@media (min-width: 576px) {
-    .dashboard-container {
-        padding: 1.5rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .btn-group {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .btn {
-        width: auto;
-        min-width: 200px;
-    }
-    
-    .fairness-metrics {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Desktop Responsive */
+/* Responsive Design */
 @media (min-width: 768px) {
     .dashboard-container {
         max-width: 1200px;
@@ -528,72 +473,14 @@
         grid-template-columns: repeat(4, 1fr);
     }
     
-    .tab-title {
-        text-align: left;
-        font-size: 2rem;
-    }
-    
-    .upload-area {
-        padding: 3rem 2rem;
-    }
-}
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-    .result-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Touch Device Optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .tab-btn {
-        padding: 1.25rem;
+    .btn-group {
+        flex-direction: row;
+        justify-content: center;
     }
     
     .btn {
-        padding: 1.25rem 1.5rem;
-        min-height: 55px;
-    }
-    
-    .rating-star {
-        font-size: 2.5rem;
-        padding: 0.5rem;
-    }
-    
-    .upload-area {
-        min-height: 250px;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --light-gray: #2c3e50;
-        --medium-gray: #95a5a6;
-        --secondary-color: #ecf0f1;
-    }
-    
-    .tab-content,
-    .stat-card,
-    .result-card {
-        background: #34495e;
-        color: #ecf0f1;
-    }
-}
-
-/* Print Styles */
-@media print {
-    .dashboard-tabs,
-    .btn,
-    .upload-area {
-        display: none !important;
-    }
-    
-    .tab-content {
-        display: block !important;
-        box-shadow: none;
-        border: 1px solid #000;
+        width: auto;
+        min-width: 200px;
     }
 }
 </style>
@@ -724,28 +611,26 @@
             Latest analysis completed successfully!
         </div>
         
-        <div class="table-responsive">
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Image</th>
-                        <th>Prediction</th>
-                        <th>Confidence</th>
-                        <th>Processing Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTableBody">
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: var(--medium-gray); padding: 3rem;">
-                            <i class="fas fa-image fa-2x mb-3" style="display: block;"></i>
-                            No analysis history yet. Upload an image to get started!
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Image</th>
+                    <th>Prediction</th>
+                    <th>Confidence</th>
+                    <th>Processing Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--medium-gray); padding: 3rem;">
+                        <i class="fas fa-image fa-2x mb-3" style="display: block;"></i>
+                        No analysis history yet. Upload an image to get started!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     
     <!-- Fairness Tab -->
@@ -868,11 +753,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('🚀 Dashboard initializing...');
         loadAnalysisHistory();
         updateStatistics();
-        
-        // Mobile optimization
-        if (window.innerWidth <= 768) {
-            console.log('📱 Mobile dashboard view optimized');
-        }
     }
     
     // Tab switching
@@ -1213,615 +1093,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-<body>
-    <div class="header">
-        <div class="header-content">
-            <div class="logo">🔬 AI Skin Lesion Detection</div>
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div id="userName">User</div>
-                <button class="logout-btn" onclick="logout()">Logout</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="main-container">
-        <div class="dashboard-tabs">
-            <button class="tab-btn active" onclick="switchTab('overview')">
-                📊 Overview
-            </button>
-            <button class="tab-btn" onclick="switchTab('upload')">
-                📁 Upload & Analyze
-            </button>
-            <button class="tab-btn" onclick="switchTab('results')">
-                📈 Results & History
-            </button>
-            <button class="tab-btn" onclick="switchTab('fairness')">
-                ⚖️ Fairness Analysis
-            </button>
-            <button class="tab-btn" onclick="switchTab('feedback')">
-                💭 Feedback
-            </button>
-        </div>
-        
-        <!-- Overview Tab -->
-        <div class="tab-content active" id="overview">
-            <div class="tab-title">📊 Dashboard Overview</div>
-            
-            <div class="welcome-section">
-                <div class="welcome-icon">👋</div>
-                <h2>Welcome to AI Skin Lesion Detection System</h2>
-                <p>Advanced medical AI with bias-aware analysis and comprehensive fairness evaluation</p>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">🖼️</div>
-                    <div class="stat-number" id="totalUploads">0</div>
-                    <div>Images Analyzed</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🎯</div>
-                    <div class="stat-number" id="avgAccuracy">94.2%</div>
-                    <div>Average Accuracy</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">⚖️</div>
-                    <div class="stat-number" id="fairnessScore">87.5%</div>
-                    <div>Fairness Score</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🕒</div>
-                    <div class="stat-number" id="avgTime">2.3s</div>
-                    <div>Avg Processing Time</div>
-                </div>
-            </div>
-            
-            <div class="alert alert-info">
-                <strong>🤖 AI System Status:</strong> All models are operational. TensorFlow 2.20.0 loaded successfully.
-            </div>
-        </div>
-        
-        <!-- Upload Tab -->
-        <div class="tab-content" id="upload">
-            <div class="tab-title">📁 Upload & Analyze Images</div>
-            
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">Click to upload or drag and drop</div>
-                <div class="upload-hint">Supported formats: JPG, PNG, JPEG (Max 10MB)</div>
-                <input type="file" id="fileInput" class="file-input" accept="image/*" onchange="handleFileUpload(event)">
-            </div>
-            
-            <div style="text-align: center; margin: 2rem 0;">
-                <button class="btn btn-secondary" onclick="useTestImage('benign')">📷 Load Benign Sample</button>
-                <button class="btn btn-secondary" onclick="useTestImage('malignant')">📷 Load Malignant Sample</button>
-            </div>
-            
-            <div class="analysis-results" id="analysisResults">
-                <h3>🤖 AI Analysis Results</h3>
-                <div id="resultContent"></div>
-            </div>
-        </div>
-        
-        <!-- Results Tab -->
-        <div class="tab-content" id="results">
-            <div class="tab-title">📈 Analysis Results & History</div>
-            
-            <div class="alert alert-success" id="resultsAlert" style="display: none;">
-                Latest analysis completed successfully!
-            </div>
-            
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Image</th>
-                        <th>Prediction</th>
-                        <th>Confidence</th>
-                        <th>Processing Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTableBody">
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: #6c757d; padding: 3rem;">
-                            No analysis history yet. Upload an image to get started!
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Fairness Tab -->
-        <div class="tab-content" id="fairness">
-            <div class="tab-title">⚖️ Fairness Analysis</div>
-            
-            <div class="alert alert-info">
-                <strong>📊 Bias Evaluation:</strong> Our system continuously monitors for demographic biases and provides fairness metrics.
-            </div>
-            
-            <div class="fairness-metrics">
-                <div class="metric-card">
-                    <div class="metric-value" id="disparateImpact">0.85</div>
-                    <div class="metric-label">Disparate Impact Ratio</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-value" id="equalisedOdds">0.92</div>
-                    <div class="metric-label">Equalised Odds</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-value" id="demographicParity">0.89</div>
-                    <div class="metric-label">Demographic Parity</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-value" id="individualFairness">0.94</div>
-                    <div class="metric-label">Individual Fairness</div>
-                </div>
-            </div>
-            
-            <div class="bias-indicator bias-medium">
-                <strong>⚠️ Bias Assessment:</strong> Medium-level bias detected across skin tone groups. 
-                14.5% accuracy gap identified. Consider additional training data for underrepresented groups.
-            </div>
-            
-            <button class="btn" onclick="runFairnessAnalysis()">🔍 Run Comprehensive Fairness Analysis</button>
-        </div>
-        
-        <!-- Feedback Tab -->
-        <div class="tab-content" id="feedback">
-            <div class="tab-title">💭 Provide Feedback</div>
-            
-            <div class="feedback-form">
-                <form id="feedbackForm">
-                    <div class="form-group">
-                        <label>Overall System Rating</label>
-                        <div class="rating-group" id="overallRating">
-                            <span class="rating-star" onclick="setRating('overall', 1)">⭐</span>
-                            <span class="rating-star" onclick="setRating('overall', 2)">⭐</span>
-                            <span class="rating-star" onclick="setRating('overall', 3)">⭐</span>
-                            <span class="rating-star" onclick="setRating('overall', 4)">⭐</span>
-                            <span class="rating-star" onclick="setRating('overall', 5)">⭐</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="trustLevel">Trust in AI Predictions</label>
-                        <select id="trustLevel">
-                            <option value="">Select trust level</option>
-                            <option value="very-high">Very High</option>
-                            <option value="high">High</option>
-                            <option value="moderate">Moderate</option>
-                            <option value="low">Low</option>
-                            <option value="very-low">Very Low</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="biasPerception">Do you perceive any bias in the AI system?</label>
-                        <select id="biasPerception">
-                            <option value="">Select perception</option>
-                            <option value="no-bias">No bias detected</option>
-                            <option value="slight-bias">Slight bias</option>
-                            <option value="moderate-bias">Moderate bias</option>
-                            <option value="significant-bias">Significant bias</option>
-                            <option value="unsure">Unsure</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="improvements">Suggestions for Improvement</label>
-                        <textarea id="improvements" placeholder="Share your thoughts on how we can improve the system..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="additionalComments">Additional Comments</label>
-                        <textarea id="additionalComments" placeholder="Any other feedback or observations..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn">📤 Submit Feedback</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        let currentUser = null;
-        let analysisHistory = [];
-        let overallRatingValue = 0;
-        
-        // Initialize dashboard
-        window.addEventListener('load', function() {
-            const session = localStorage.getItem('user_session');
-            if (!session) {
-                window.location.href = '/auth/';
-                return;
-            }
-            
-            currentUser = JSON.parse(session);
-            updateUserInfo();
-            loadAnalysisHistory();
-        });
-        
-        function updateUserInfo() {
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-        }
-        
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-        }
-        
-        function logout() {
-            localStorage.removeItem('user_session');
-            window.location.href = '/auth/';
-        }
-        
-        // File upload handling
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                analyzeImage(file);
-            }
-        }
-        
-        // Drag and drop support
-        const uploadArea = document.querySelector('.upload-area');
-        
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-        
-        uploadArea.addEventListener('dragleave', function(e) {
-            uploadArea.classList.remove('dragover');
-        });
-        
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                analyzeImage(file);
-            }
-        });
-        
-        async function analyzeImage(file) {
-            const formData = new FormData();
-            formData.append('image', file);
-            
-            // Show loading
-            const resultDiv = document.getElementById('analysisResults');
-            const resultContent = document.getElementById('resultContent');
-            
-            resultContent.innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="border: 3px solid #3498db; border-top: 3px solid #f3f3f3; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                    <h3 style="margin-top: 1rem;">🤖 Analyzing Image...</h3>
-                    <p>Running AI analysis with bias detection...</p>
-                </div>
-            `;
-            resultDiv.style.display = 'block';
-            
-            try {
-                const response = await fetch('/api/upload/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                displayAnalysisResult(data, file);
-                addToHistory(data, file);
-                
-            } catch (error) {
-                resultContent.innerHTML = `
-                    <div class="alert alert-warning">
-                        ❌ Error analyzing image: ${error.message}
-                    </div>
-                `;
-            }
-        }
-        
-        function displayAnalysisResult(data, file) {
-            console.log('📊 Analysis result data:', data);
-            console.log('📄 File data:', file);
-            
-            const resultContent = document.getElementById('resultContent');
-            
-            // Parse confidence safely
-            let confidence = 0;
-            if (data.confidence_raw !== undefined && data.confidence_raw !== null) {
-                confidence = Math.round(data.confidence_raw * 100);
-            } else if (data.analysis && data.analysis.confidence_score !== undefined) {
-                confidence = Math.round(data.analysis.confidence_score * 100);
-            }
-            
-            const prediction = data.prediction || data.analysis?.result || 'UNKNOWN';
-            const predictionClass = (prediction.toLowerCase() === 'malignant') ? 'prediction-malignant' : 'prediction-benign';
-            const fileSize = file && file.size ? (file.size / 1024).toFixed(1) : 'N/A';
-            const fileName = file && file.name ? file.name : data.filename || 'Unknown';
-            const modelStatus = data.model_loaded ? 'Production CNN' : 'Demo Mode';
-            
-            console.log(`📈 Processed values - Confidence: ${confidence}%, Prediction: ${prediction}, File: ${fileName}`);
-            
-            resultContent.innerHTML = `
-                <div class="result-grid">
-                    <div class="result-card">
-                        <h3>🎯 Prediction</h3>
-                        <div class="prediction-badge ${predictionClass}">
-                            ${prediction.toUpperCase()}
-                        </div>
-                        <p><strong>📊 Confidence Level</strong></p>
-                        <div class="confidence-display">
-                            <span style="font-size: 1.5em; font-weight: bold; color: #2ecc71;">${confidence}%</span>
-                        </div>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" style="width: ${confidence}%;">
-                                ${confidence}% Confidence
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3>📋 Analysis Details</h3>
-                        <p><strong>File:</strong> ${fileName}</p>
-                        <p><strong>Size:</strong> ${fileSize} KB</p>
-                        <p><strong>AI Model:</strong> ${modelStatus}</p>
-                        <p><strong>Status:</strong> ${data.success ? 'Complete' : 'Error'}</p>
-                        <p><strong>Processing Time:</strong> ${data.processing_time || 'N/A'}</p>
-                    </div>
-                </div>
-                
-                <div class="alert alert-warning" style="margin-top: 1rem;">
-                    <strong>⚠️ Important:</strong> This is a research tool only. Always consult healthcare professionals for medical advice.
-                </div>
-            `;
-            
-            // Update statistics
-            updateStatistics();
-        }
-        
-        function useTestImage(type) {
-            const testResults = {
-                benign: {
-                    prediction: 'benign',
-                    confidence: 0.87,
-                    model_loaded: true,
-                    message: 'Real AI analysis using trained TensorFlow model'
-                },
-                malignant: {
-                    prediction: 'malignant',
-                    confidence: 0.92,
-                    model_loaded: true,
-                    message: 'Real AI analysis using trained TensorFlow model'
-                }
-            };
-            
-            const mockFile = {
-                name: `test_${type}_sample.jpg`,
-                size: 15000
-            };
-            
-            displayAnalysisResult(testResults[type], mockFile);
-            addToHistory(testResults[type], mockFile);
-            document.getElementById('analysisResults').style.display = 'block';
-        }
-        
-        function addToHistory(data, file) {
-            const historyItem = {
-                date: new Date().toLocaleString(),
-                filename: file.name,
-                prediction: data.prediction,
-                confidence: data.confidence_raw ? Math.round(data.confidence_raw * 100) : 0,
-                processingTime: data.processing_time || '2.3s',
-                status: 'completed'
-            };
-            
-            analysisHistory.unshift(historyItem);
-            updateHistoryTable();
-            
-            // Show success alert
-            const alert = document.getElementById('resultsAlert');
-            alert.style.display = 'block';
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 3000);
-        }
-        
-        function updateHistoryTable() {
-            const tbody = document.getElementById('historyTableBody');
-            
-            if (analysisHistory.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: #6c757d; padding: 3rem;">
-                            No analysis history yet. Upload an image to get started!
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            tbody.innerHTML = analysisHistory.map(item => {
-                // Format confidence value properly
-                let confidenceDisplay = 'N/A';
-                if (item.confidence !== undefined && item.confidence !== null && !isNaN(item.confidence)) {
-                    confidenceDisplay = `${parseFloat(item.confidence).toFixed(1)}%`;
-                }
-                
-                // Format date properly
-                let dateDisplay = 'N/A';
-                if (item.timestamp) {
-                    try {
-                        const date = new Date(item.timestamp);
-                        dateDisplay = date.toLocaleDateString();
-                    } catch (e) {
-                        console.warn('Invalid date format:', item.timestamp);
-                    }
-                } else if (item.date) {
-                    dateDisplay = item.date;
-                }
-                
-                return `
-                <tr>
-                    <td>${dateDisplay}</td>
-                    <td>${item.filename || 'Unknown'}</td>
-                    <td><span class="prediction-badge prediction-${(item.prediction || 'unknown').toLowerCase()}">${(item.prediction || 'UNKNOWN').toUpperCase()}</span></td>
-                    <td>${confidenceDisplay}</td>
-                    <td>${item.processing_time || item.processingTime || 'N/A'}</td>
-                    <td><span class="status-online">✅ ${item.status || 'Complete'}</span></td>
-                </tr>
-                `;
-            }).join('');
-        }
-        
-        function updateStatistics() {
-            document.getElementById('totalUploads').textContent = analysisHistory.length;
-            
-            if (analysisHistory.length > 0) {
-                const avgConf = analysisHistory.reduce((sum, item) => sum + item.confidence, 0) / analysisHistory.length;
-                document.getElementById('avgAccuracy').textContent = avgConf.toFixed(1) + '%';
-            }
-        }
-        
-        function runFairnessAnalysis() {
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '🔄 Running Analysis...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                btn.innerHTML = '✅ Analysis Complete';
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 2000);
-            }, 3000);
-        }
-        
-        function showDetailedFairness() {
-            switchTab('fairness');
-            document.querySelector('[onclick="switchTab(\'fairness\')"]').click();
-        }
-        
-        function setRating(type, value) {
-            overallRatingValue = value;
-            const stars = document.querySelectorAll('#overallRating .rating-star');
-            stars.forEach((star, index) => {
-                if (index < value) {
-                    star.classList.add('active');
-                } else {
-                    star.classList.remove('active');
-                }
-            });
-        }
-        
-        // Feedback form submission
-        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const feedbackData = {
-                rating: overallRatingValue,
-                trust: document.getElementById('trustLevel').value,
-                bias: document.getElementById('biasPerception').value,
-                improvements: document.getElementById('improvements').value,
-                comments: document.getElementById('additionalComments').value,
-                user: currentUser.email,
-                timestamp: new Date().toISOString()
-            };
-            
-            // Simulate submission
-            const btn = this.querySelector('.btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '📤 Submitting...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                btn.innerHTML = '✅ Feedback Submitted!';
-                
-                // Reset form
-                setTimeout(() => {
-                    this.reset();
-                    setRating('overall', 0);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 2000);
-            }, 1500);
-        });
-        
-        function loadAnalysisHistory() {
-            // First try to load from database, fallback to localStorage
-            loadHistoryFromDatabase();
-        }
-        
-        // Load existing analysis history from database
-        async function loadHistoryFromDatabase() {
-            try {
-                const response = await fetch('/api/history/');
-                const data = await response.json();
-                
-                if (data.success && data.history.length > 0) {
-                    // Merge database history with any existing localStorage history
-                    const existingHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
-                    
-                    // Add database history that's not already in localStorage
-                    const existingFilenames = new Set(existingHistory.map(item => item.filename));
-                    const newHistoryItems = data.history.filter(item => !existingFilenames.has(item.filename));
-                    
-                    analysisHistory = [...existingHistory, ...newHistoryItems];
-                    updateHistoryTable();
-                    updateStatistics();
-                    saveHistory();
-                    
-                    console.log(`📊 Loaded ${data.history.length} analysis records from database`);
-                } else {
-                    // Fallback to localStorage if no database records
-                    loadHistoryFromLocalStorage();
-                }
-            } catch (error) {
-                console.error('Error loading history from database:', error);
-                // Fall back to localStorage only
-                loadHistoryFromLocalStorage();
-            }
-        }
-        
-        // Load history from localStorage (fallback)
-        function loadHistoryFromLocalStorage() {
-            const saved = localStorage.getItem('analysis_history');
-            if (saved) {
-                analysisHistory = JSON.parse(saved);
-                updateHistoryTable();
-                updateStatistics();
-            }
-        }
-        
-        // Save history to localStorage when updated
-        function saveHistory() {
-            localStorage.setItem('analysis_history', JSON.stringify(analysisHistory));
-        }
-        
-        // Add CSS animation for loading spinner
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-</body>
-</html>
