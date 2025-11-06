@@ -40,21 +40,15 @@ jobs:
       - name: Run migrations
         env:
           DJANGO_SETTINGS_MODULE: backend.settings
-          DB_NAME: skin_lesion_db
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-          DB_HOST: localhost
-          DB_PORT: 5432
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/skin_lesion_db
+          DEBUG: True
         run: python manage.py migrate
 
       - name: Run tests
         env:
           DJANGO_SETTINGS_MODULE: backend.settings
-          DB_NAME: skin_lesion_db
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-          DB_HOST: localhost
-          DB_PORT: 5432
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/skin_lesion_db
+          DEBUG: True
         run: pytest --maxfail=1 --disable-warnings -q
 
       - name: Check code style
