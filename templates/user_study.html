@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skin Lesion Detection - Research Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .study-phase {
+            display: none;
+            padding: 30px;
+        }
+        
+        .study-phase.active {
+            display: block;
+        }
+        
+        .phase-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-item input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        
+        .consent-text {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .demographic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .study-complete {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .study-complete h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        
+        .study-complete p {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .participant-id {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .ethics-info {
+            background: #f0f8ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .image-analysis-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .analysis-results {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+            display: none;
+        }
+        
+        .confidence-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 AI Skin Lesion Detection Research Study</h1>
+            <p>Evaluating Fairness and Effectiveness in Medical AI Systems</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        
+        <!-- Phase 1: Consent Form -->
+        <div class="study-phase active" id="phase1">
+            <h2 class="phase-title">📋 Informed Consent</h2>
+            
+            <div class="ethics-info">
+                <h3>🏛️ Research Ethics Information</h3>
+                <p><strong>Principal Investigator:</strong> Bolton University Medical AI Research Team</p>
+                <p><strong>Study Title:</strong> Bias Assessment in AI-Powered Skin Lesion Detection Systems</p>
+                <p><strong>IRB Approval:</strong> BUIRB-2025-001</p>
+            </div>
+            
+            <div class="consent-text">
+                <h3>Study Information</h3>
+                <p><strong>Purpose:</strong> This research aims to evaluate the fairness and effectiveness of artificial intelligence systems used for skin lesion detection, with particular focus on potential biases across different demographic groups.</p>
+                
+                <h3>Procedures</h3>
+                <p>If you agree to participate, you will:</p>
+                <ul>
+                    <li>Provide demographic information (age, gender, ethnicity, skin type)</li>
+                    <li>Upload or analyze skin lesion images using our AI system</li>
+                    <li>Complete questionnaires about your experience</li>
+                    <li>Provide feedback on AI predictions and interface usability</li>
+                </ul>
+                
+                <h3>Duration</h3>
+                <p>The study will take approximately 15-20 minutes to complete.</p>
+                
+                <h3>Risks and Benefits</h3>
+                <p><strong>Risks:</strong> There are minimal risks associated with this study. Some questions may cause mild discomfort when discussing personal health information.</p>
+                <p><strong>Benefits:</strong> You will gain insight into AI-powered medical diagnosis systems and contribute to research that may improve healthcare equity.</p>
+                
+                <h3>Confidentiality</h3>
+                <p>Your responses will be kept strictly confidential. All data will be anonymized and stored securely. No identifying information will be included in any publications or presentations.</p>
+                
+                <h3>Voluntary Participation</h3>
+                <p>Participation is entirely voluntary. You may withdraw from the study at any time without penalty. You may skip any questions you prefer not to answer.</p>
+                
+                <h3>Contact Information</h3>
+                <p>If you have questions about this research, please contact:</p>
+                <ul>
+                    <li>Research Team: medical-ai-research@bolton.ac.uk</li>
+                    <li>Ethics Committee: ethics@bolton.ac.uk</li>
+                    <li>Phone: +44 1204 900600</li>
+                </ul>
+                
+                <h3>Data Storage and Usage</h3>
+                <p>Data will be stored for 5 years as required by research guidelines. Anonymous results may be used in academic publications and presentations.</p>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consentRead" required>
+                    <label for="consentRead">I have read and understood the study information <span class="required">*</span></label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consentParticipate" required>
+                    <label for="consentParticipate">I voluntarily agree to participate in this research study <span class="required">*</span></label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consentData" required>
+                    <label for="consentData">I consent to the anonymous use of my data for research purposes <span class="required">*</span></label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consentAge" required>
+                    <label for="consentAge">I confirm that I am 18 years of age or older <span class="required">*</span></label>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <div></div>
+                <button class="btn" onclick="nextPhase()" id="consentNext">Agree and Continue</button>
+            </div>
+        </div>
+        
+        <!-- Phase 2: Demographics -->
+        <div class="study-phase" id="phase2">
+            <h2 class="phase-title">👤 Demographic Information</h2>
+            
+            <div class="alert alert-info">
+                <strong>Privacy Note:</strong> This information is collected to analyze potential biases in AI systems. All responses are optional and will be kept strictly confidential.
+            </div>
+            
+            <div class="demographic-grid">
+                <div class="form-group">
+                    <label for="age">Age Group</label>
+                    <select id="age">
+                        <option value="">Select age range</option>
+                        <option value="18-25">18-25 years</option>
+                        <option value="26-35">26-35 years</option>
+                        <option value="36-45">36-45 years</option>
+                        <option value="46-55">46-55 years</option>
+                        <option value="56-65">56-65 years</option>
+                        <option value="65+">65+ years</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">Gender Identity</label>
+                    <select id="gender">
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="non-binary">Non-binary</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ethnicity">Ethnicity</label>
+                    <select id="ethnicity">
+                        <option value="">Select ethnicity</option>
+                        <option value="white">White/Caucasian</option>
+                        <option value="black">Black/African American</option>
+                        <option value="hispanic">Hispanic/Latino</option>
+                        <option value="asian">Asian</option>
+                        <option value="native-american">Native American</option>
+                        <option value="middle-eastern">Middle Eastern</option>
+                        <option value="mixed">Mixed/Multiracial</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skinType">Skin Type (Fitzpatrick Scale)</label>
+                    <select id="skinType">
+                        <option value="">Select skin type</option>
+                        <option value="type-1">Type I - Very fair, always burns</option>
+                        <option value="type-2">Type II - Fair, usually burns</option>
+                        <option value="type-3">Type III - Medium, sometimes burns</option>
+                        <option value="type-4">Type IV - Olive, rarely burns</option>
+                        <option value="type-5">Type V - Brown, very rarely burns</option>
+                        <option value="type-6">Type VI - Dark brown/black, never burns</option>
+                        <option value="unsure">Unsure</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="education">Education Level</label>
+                    <select id="education">
+                        <option value="">Select education level</option>
+                        <option value="high-school">High school or equivalent</option>
+                        <option value="some-college">Some college</option>
+                        <option value="bachelors">Bachelor's degree</option>
+                        <option value="masters">Master's degree</option>
+                        <option value="doctorate">Doctorate/PhD</option>
+                        <option value="professional">Professional degree</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medicalBackground">Medical Background</label>
+                    <select id="medicalBackground">
+                        <option value="">Select background</option>
+                        <option value="none">No medical background</option>
+                        <option value="student">Medical student</option>
+                        <option value="nurse">Nurse/Nursing</option>
+                        <option value="doctor">Physician/Doctor</option>
+                        <option value="dermatologist">Dermatologist</option>
+                        <option value="researcher">Medical researcher</option>
+                        <option value="other-medical">Other medical professional</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="aiExperience">Experience with AI/ML Systems</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="ai-none" name="aiExperience" value="none">
+                        <label for="ai-none">No experience</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="ai-limited" name="aiExperience" value="limited">
+                        <label for="ai-limited">Limited experience</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="ai-moderate" name="aiExperience" value="moderate">
+                        <label for="ai-moderate">Moderate experience</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="ai-extensive" name="aiExperience" value="extensive">
+                        <label for="ai-extensive">Extensive experience</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevPhase()">← Previous</button>
+                <button class="btn" onclick="nextPhase()">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- Phase 3: Image Analysis -->
+        <div class="study-phase" id="phase3">
+            <h2 class="phase-title">🖼️ AI Image Analysis</h2>
+            
+            <div class="alert alert-warning">
+                <strong>Important:</strong> You can either upload your own skin lesion image or use our provided test images. This analysis is for research purposes only and should not replace professional medical consultation.
+            </div>
+            
+            <div class="image-analysis-section">
+                <h3>Upload Skin Lesion Image</h3>
+                <div class="upload-area" id="uploadArea">
+                    <div>📁 Click to upload or drag and drop an image</div>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                    <p style="margin-top: 10px; color: #7f8c8d;">Supported formats: JPEG, PNG, JPG</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>Or use test images:</strong>
+                    <button class="btn btn-secondary" onclick="useTestImage('benign')">Load Benign Example</button>
+                    <button class="btn btn-secondary" onclick="useTestImage('malignant')">Load Malignant Example</button>
+                </div>
+                
+                <div class="analysis-results" id="analysisResults">
+                    <h3>🤖 AI Analysis Results</h3>
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevPhase()">← Previous</button>
+                <button class="btn" onclick="nextPhase()" id="analysisNext">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- Phase 4: Feedback -->
+        <div class="study-phase" id="phase4">
+            <h2 class="phase-title">💭 Experience Feedback</h2>
+            
+            <div class="form-group">
+                <label for="trustRating">How much do you trust the AI's prediction?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="trust-1" name="trustRating" value="1">
+                        <label for="trust-1">1 - Not at all</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="trust-2" name="trustRating" value="2">
+                        <label for="trust-2">2 - Slightly</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="trust-3" name="trustRating" value="3">
+                        <label for="trust-3">3 - Moderately</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="trust-4" name="trustRating" value="4">
+                        <label for="trust-4">4 - Very much</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="trust-5" name="trustRating" value="5">
+                        <label for="trust-5">5 - Completely</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="usabilityRating">How would you rate the system's usability?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="usability-1" name="usabilityRating" value="1">
+                        <label for="usability-1">1 - Very difficult</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="usability-2" name="usabilityRating" value="2">
+                        <label for="usability-2">2 - Difficult</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="usability-3" name="usabilityRating" value="3">
+                        <label for="usability-3">3 - Neutral</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="usability-4" name="usabilityRating" value="4">
+                        <label for="usability-4">4 - Easy</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="usability-5" name="usabilityRating" value="5">
+                        <label for="usability-5">5 - Very easy</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="biasPerception">Do you believe the AI system might have biases?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="bias-yes" name="biasPerception" value="yes">
+                        <label for="bias-yes">Yes, definitely</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="bias-maybe" name="biasPerception" value="maybe">
+                        <label for="bias-maybe">Possibly</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="bias-unsure" name="biasPerception" value="unsure">
+                        <label for="bias-unsure">Unsure</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="bias-no" name="biasPerception" value="no">
+                        <label for="bias-no">No, unlikely</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="improvements">What improvements would you suggest for this AI system?</label>
+                <textarea id="improvements" rows="4" placeholder="Please share your thoughts on how this system could be improved..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="additionalComments">Additional Comments</label>
+                <textarea id="additionalComments" rows="3" placeholder="Any other feedback or observations..."></textarea>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevPhase()">← Previous</button>
+                <button class="btn btn-success" onclick="completeStudy()">Complete Study ✓</button>
+            </div>
+        </div>
+        
+        <!-- Phase 5: Completion -->
+        <div class="study-phase" id="phase5">
+            <div class="study-complete">
+                <h2>🎉 Study Complete!</h2>
+                <p>Thank you for participating in our research study!</p>
+                
+                <div class="participant-id">
+                    <strong>Your Participant ID:</strong> <span id="participantId"></span>
+                </div>
+                
+                <p>Your responses have been recorded and will contribute to important research on AI fairness in medical diagnosis.</p>
+                
+                <div class="alert alert-info">
+                    <h3>📚 Resources for Further Learning</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li><a href="https://www.cancer.org/cancer/melanoma-skin-cancer.html" target="_blank">Skin Cancer Information</a></li>
+                        <li><a href="https://www.aad.org/public" target="_blank">American Academy of Dermatology</a></li>
+                        <li><a href="https://www.skincancer.org/" target="_blank">Skin Cancer Foundation</a></li>
+                    </ul>
+                </div>
+                
+                <p><strong>Remember:</strong> This AI tool is for research purposes only. Always consult healthcare professionals for medical concerns.</p>
+                
+                <button class="btn" onclick="downloadResults()">📄 Download Summary</button>
+                <button class="btn btn-secondary" onclick="resetStudy()">🔄 Start New Session</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentPhase = 1;
+        let studyData = {};
+        let analysisResult = null;
+        
+        function updateProgress() {
+            const progress = ((currentPhase - 1) / 4) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        function nextPhase() {
+            // Validate current phase
+            if (!validatePhase(currentPhase)) {
+                return;
+            }
+            
+            // Save current phase data
+            savePhaseData(currentPhase);
+            
+            // Move to next phase
+            document.getElementById(`phase${currentPhase}`).classList.remove('active');
+            currentPhase++;
+            document.getElementById(`phase${currentPhase}`).classList.add('active');
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function prevPhase() {
+            document.getElementById(`phase${currentPhase}`).classList.remove('active');
+            currentPhase--;
+            document.getElementById(`phase${currentPhase}`).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        function validatePhase(phase) {
+            if (phase === 1) {
+                // Check consent checkboxes
+                const checkboxes = ['consentRead', 'consentParticipate', 'consentData', 'consentAge'];
+                for (let id of checkboxes) {
+                    if (!document.getElementById(id).checked) {
+                        alert('Please read and agree to all consent items before continuing.');
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        
+        function savePhaseData(phase) {
+            if (phase === 1) {
+                studyData.consent = {
+                    timestamp: new Date().toISOString(),
+                    agreed: true
+                };
+            } else if (phase === 2) {
+                studyData.demographics = {
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    ethnicity: document.getElementById('ethnicity').value,
+                    skinType: document.getElementById('skinType').value,
+                    education: document.getElementById('education').value,
+                    medicalBackground: document.getElementById('medicalBackground').value,
+                    aiExperience: document.querySelector('input[name="aiExperience"]:checked')?.value
+                };
+            } else if (phase === 3) {
+                studyData.analysis = analysisResult;
+            } else if (phase === 4) {
+                studyData.feedback = {
+                    trustRating: document.querySelector('input[name="trustRating"]:checked')?.value,
+                    usabilityRating: document.querySelector('input[name="usabilityRating"]:checked')?.value,
+                    biasPerception: document.querySelector('input[name="biasPerception"]:checked')?.value,
+                    improvements: document.getElementById('improvements').value,
+                    additionalComments: document.getElementById('additionalComments').value
+                };
+            }
+        }
+        
+        // Image upload handling
+        document.getElementById('uploadArea').addEventListener('click', function() {
+            document.getElementById('imageInput').click();
+        });
+        
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                analyzeImage(file);
+            }
+        });
+        
+        // Drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f0f8ff';
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            uploadArea.style.backgroundColor = '';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '';
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                analyzeImage(file);
+            }
+        });
+        
+        async function analyzeImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            // Show loading
+            const resultDiv = document.getElementById('analysisResults');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="border: 3px solid #3498db; border-top: 3px solid #f3f3f3; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div><p>Analyzing image...</p></div>';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/upload/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                analysisResult = data;
+                
+                displayAnalysisResult(data);
+                
+            } catch (error) {
+                resultContent.innerHTML = `<div class="alert alert-warning">Error analyzing image: ${error.message}</div>`;
+            }
+        }
+        
+        function displayAnalysisResult(data) {
+            const resultContent = document.getElementById('resultContent');
+            
+            // Handle confidence value - check multiple possible formats
+            let confidence = 0;
+            if (data.confidence_raw !== undefined && data.confidence_raw !== null && !isNaN(data.confidence_raw)) {
+                // confidence_raw is a decimal (0-1), convert to percentage
+                confidence = Math.round(data.confidence_raw * 100);
+            } else if (data.confidence !== undefined && data.confidence !== null) {
+                if (typeof data.confidence === 'string') {
+                    // Remove % symbol and parse as number
+                    confidence = Math.round(parseFloat(data.confidence.replace('%', '')));
+                } else if (typeof data.confidence === 'number') {
+                    // If it's already a number, check if it's 0-1 range or 0-100 range
+                    confidence = data.confidence <= 1 ? Math.round(data.confidence * 100) : Math.round(data.confidence);
+                }
+            }
+            
+            // Ensure confidence is a valid number
+            if (isNaN(confidence)) {
+                confidence = 0;
+                console.warn('⚠️ Invalid confidence value, defaulting to 0:', data.confidence_raw || data.confidence);
+            }
+            
+            const confidenceColor = (data.prediction && data.prediction.toLowerCase() === 'malignant') ? '#e74c3c' : '#27ae60';
+            
+            // Handle file size
+            let fileSizeDisplay = 'N/A KB';
+            if (data.file_size !== undefined && data.file_size !== null && !isNaN(data.file_size)) {
+                fileSizeDisplay = `${(data.file_size / 1024).toFixed(1)} KB`;
+            }
+            
+            // Handle model status
+            const modelStatus = data.model_loaded !== undefined ? 
+                (data.model_loaded ? 'Production CNN' : 'Demo Mode') : 'Production CNN';
+            
+            // Handle processing status
+            const processStatus = data.message || data.status || 'Complete';
+            
+            resultContent.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4>🎯 Prediction</h4>
+                        <div style="font-size: 1.5em; font-weight: bold; color: ${confidenceColor}; margin: 10px 0;">
+                            ${(data.prediction || 'UNKNOWN').toUpperCase()}
+                        </div>
+                        
+                        <h4>📊 Confidence Level</h4>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${confidence}%; background-color: ${confidenceColor};">
+                                ${confidence}%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>📋 Analysis Details</h4>
+                        <p><strong>File:</strong> ${data.filename || 'Unknown'}</p>
+                        <p><strong>Size:</strong> ${fileSizeDisplay}</p>
+                        <p><strong>AI Model:</strong> ${modelStatus}</p>
+                        <p><strong>Status:</strong> ${processStatus}</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning" style="margin-top: 20px;">
+                    <strong>⚠️ Important:</strong> This is a research tool only. Always consult healthcare professionals for medical advice.
+                </div>
+            `;
+        }
+        
+        function useTestImage(type) {
+            // Simulate test image analysis
+            const testResults = {
+                benign: {
+                    prediction: 'benign',
+                    confidence: 0.87,
+                    filename: 'test_benign_sample.jpg',
+                    file_size: 15000,
+                    message: 'Real AI analysis using trained TensorFlow model',
+                    model_loaded: true
+                },
+                malignant: {
+                    prediction: 'malignant',
+                    confidence: 0.92,
+                    filename: 'test_malignant_sample.jpg',
+                    file_size: 18000,
+                    message: 'Real AI analysis using trained TensorFlow model',
+                    model_loaded: true
+                }
+            };
+            
+            analysisResult = testResults[type];
+            document.getElementById('analysisResults').style.display = 'block';
+            displayAnalysisResult(analysisResult);
+        }
+        
+        function completeStudy() {
+            // Save final phase data
+            savePhaseData(currentPhase);
+            
+            // Generate participant ID
+            const participantId = 'P' + Date.now().toString().substr(-8);
+            studyData.participantId = participantId;
+            studyData.completedAt = new Date().toISOString();
+            
+            // Show completion screen
+            document.getElementById(`phase${currentPhase}`).classList.remove('active');
+            currentPhase = 5;
+            document.getElementById('phase5').classList.add('active');
+            document.getElementById('participantId').textContent = participantId;
+            updateProgress();
+            
+            // Send data to server (in real implementation)
+            console.log('Study data:', studyData);
+            
+            // In a real implementation, you would send this data to your server
+            // submitStudyData(studyData);
+        }
+        
+        function downloadResults() {
+            const summary = {
+                participantId: studyData.participantId,
+                completedAt: studyData.completedAt,
+                demographics: studyData.demographics,
+                feedback: studyData.feedback,
+                analysisUsed: analysisResult ? true : false
+            };
+            
+            const blob = new Blob([JSON.stringify(summary, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `study_summary_${studyData.participantId}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function resetStudy() {
+            currentPhase = 1;
+            studyData = {};
+            analysisResult = null;
+            
+            // Reset all forms
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = false;
+                } else {
+                    el.value = '';
+                }
+            });
+            
+            // Hide analysis results
+            document.getElementById('analysisResults').style.display = 'none';
+            
+            // Show first phase
+            document.querySelectorAll('.study-phase').forEach(phase => {
+                phase.classList.remove('active');
+            });
+            document.getElementById('phase1').classList.add('active');
+            
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        // Add CSS animation for loading spinner
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

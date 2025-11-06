@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Upload Image{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Upload Skin Lesion Image</h2>
+<form method="post" enctype="multipart/form-data" action="{% url 'classify' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="image" class="form-label">Choose Image</label>
+        <input type="file" class="form-control" id="image" name="image" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Classify</button>
+</form>
+{% endblock %}

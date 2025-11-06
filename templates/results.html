@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Classification Results{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Classification Results</h2>
+<div class="card p-3 shadow-sm">
+    <p><strong>Prediction:</strong> {{ prediction }}</p>
+    <p><strong>Confidence:</strong> {{ confidence }}%</p>
+    <p><strong>Fairness Disclaimer:</strong> This model has been tested on diverse datasets to reduce bias, 
+        but results should not replace professional medical diagnosis.</p>
+</div>
+<a href="{% url 'upload' %}" class="btn btn-secondary mt-3">Upload Another</a>
+<a href="{% url 'feedback' %}" class="btn btn-outline-primary mt-3">Give Feedback</a>
+{% endblock %}

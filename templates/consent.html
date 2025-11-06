@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Research Consent{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Research Participation Consent</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Study Title: Bias-Aware Skin Lesion Detection System</h5>
+                    
+                    <h6 class="mt-4">Purpose of the Study</h6>
+                    <p>You are being invited to participate in research to evaluate the fairness and effectiveness of an AI-based skin lesion detection system across different skin tones and demographic groups.</p>
+                    
+                    <h6 class="mt-3">What Will Happen</h6>
+                    <ul>
+                        <li>You will upload skin lesion images for analysis</li>
+                        <li>You will provide feedback on the system's predictions</li>
+                        <li>You will complete questionnaires about your experience</li>
+                        <li>You may provide demographic information (optional)</li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Data Collection and Privacy</h6>
+                    <ul>
+                        <li>All data will be anonymized and used only for research purposes</li>
+                        <li>Images and personal information will be stored securely</li>
+                        <li>You can withdraw from the study at any time</li>
+                        <li>Data will be retained for 5 years as per university policy</li>
+                    </ul>
+                    
+                    <form method="post" id="consentForm">
+                        {% csrf_token %}
+                        
+                        <div class="mt-4">
+                            <h6>Consent Items</h6>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="consent_to_participate" id="consent1" required>
+                                <label class="form-check-label" for="consent1">
+                                    I consent to participate in this research study
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="consent_data_collection" id="consent2" required>
+                                <label class="form-check-label" for="consent2">
+                                    I consent to the collection and analysis of my feedback data
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="consent_image_analysis" id="consent3" required>
+                                <label class="form-check-label" for="consent3">
+                                    I consent to the analysis of uploaded images for research purposes
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="consent_demographic_data" id="consent4">
+                                <label class="form-check-label" for="consent4">
+                                    I consent to provide demographic information (optional)
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="consent_feedback_publication" id="consent5">
+                                <label class="form-check-label" for="consent5">
+                                    I consent to anonymized feedback being used in publications (optional)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-secondary me-md-2" onclick="window.history.back()">
+                                Decline
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                I Consent - Continue to Study
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Image Feedback{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Prediction Feedback</h3>
+                    <p class="mb-0 text-muted">Please provide feedback on the prediction for your uploaded image.</p>
+                </div>
+                <div class="card-body">
+                    <!-- Display prediction results -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <img src="{{ image_url }}" alt="Uploaded image" class="img-fluid rounded" style="max-height: 300px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="prediction-results">
+                                <h5>Prediction Results</h5>
+                                <div class="alert alert-info">
+                                    <strong>Prediction:</strong> {{ prediction }}<br>
+                                    <strong>Confidence:</strong> {{ confidence }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="post" id="feedbackForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="image_upload_id" value="{{ image_upload_id }}">
+                        
+                        <!-- Trust and Confidence Questions -->
+                        <div class="mb-4">
+                            <h5>Trust and Confidence</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">How trustworthy do you find this prediction?</label>
+                                <div class="row">
+                                    {% for value, label in trust_choices %}
+                                    <div class="col">
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="radio" name="trust_in_prediction" id="trust{{ value }}" value="{{ value }}" required>
+                                            <label class="form-check-label small" for="trust{{ value }}">
+                                                {{ value }}<br>{{ label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">How confident are you in this AI system overall?</label>
+                                <div class="row">
+                                    {% for value, label in confidence_choices %}
+                                    <div class="col">
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="radio" name="confidence_in_system" id="confidence{{ value }}" value="{{ value }}" required>
+                                            <label class="form-check-label small" for="confidence{{ value }}">
+                                                {{ value }}<br>{{ label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="would_act_on_result" id="actOnResult">
+                                    <label class="form-check-label" for="actOnResult">
+                                        I would act on this prediction (e.g., seek medical attention)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Accuracy and Bias Questions -->
+                        <div class="mb-4">
+                            <h5>Accuracy and Bias</h5>
+                            
+                            <div class="mb-3">
+                                <label for="perceived_accuracy" class="form-label">Rate the perceived accuracy of this prediction (1-5)</label>
+                                <select class="form-select" name="perceived_accuracy" id="perceived_accuracy" required>
+                                    <option value="">Select rating</option>
+                                    <option value="1">1 - Very inaccurate</option>
+                                    <option value="2">2 - Somewhat inaccurate</option>
+                                    <option value="3">3 - Neutral</option>
+                                    <option value="4">4 - Somewhat accurate</option>
+                                    <option value="5">5 - Very accurate</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="noticed_bias" id="noticedBias">
+                                    <label class="form-check-label" for="noticedBias">
+                                        I noticed bias in this prediction
+                                    </label>
+                                </div>
+                                
+                                <div id="biasDescription" style="display: none;">
+                                    <label for="bias_description" class="form-label">Please describe the bias you noticed:</label>
+                                    <textarea class="form-control" name="bias_description" id="bias_description" rows="3" placeholder="Describe any bias you observed..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- User Experience Questions -->
+                        <div class="mb-4">
+                            <h5>User Experience</h5>
+                            
+                            <div class="mb-3">
+                                <label for="ease_of_use" class="form-label">How easy was it to use this system? (1-5)</label>
+                                <select class="form-select" name="ease_of_use" id="ease_of_use" required>
+                                    <option value="">Select rating</option>
+                                    <option value="1">1 - Very difficult</option>
+                                    <option value="2">2 - Somewhat difficult</option>
+                                    <option value="3">3 - Neutral</option>
+                                    <option value="4">4 - Somewhat easy</option>
+                                    <option value="5">5 - Very easy</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="interface_clarity" class="form-label">How clear was the interface and results? (1-5)</label>
+                                <select class="form-select" name="interface_clarity" id="interface_clarity" required>
+                                    <option value="">Select rating</option>
+                                    <option value="1">1 - Very unclear</option>
+                                    <option value="2">2 - Somewhat unclear</option>
+                                    <option value="3">3 - Neutral</option>
+                                    <option value="4">4 - Somewhat clear</option>
+                                    <option value="5">5 - Very clear</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="additional_comments" class="form-label">Additional comments (optional)</label>
+                                <textarea class="form-control" name="additional_comments" id="additional_comments" rows="3" placeholder="Any additional feedback about this specific prediction..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('noticedBias').addEventListener('change', function() {
+    const biasDescription = document.getElementById('biasDescription');
+    if (this.checked) {
+        biasDescription.style.display = 'block';
+        document.getElementById('bias_description').required = true;
+    } else {
+        biasDescription.style.display = 'none';
+        document.getElementById('bias_description').required = false;
+        document.getElementById('bias_description').value = '';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skin Lesion Detection - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 600px;
+            display: flex;
+        }
+        
+        .auth-left {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 60px 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .auth-right {
+            padding: 60px 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .auth-left h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .auth-left p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            list-style: none;
+            text-align: left;
+            margin-top: 30px;
+        }
+        
+        .features li {
+            margin: 15px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            cursor: pointer;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .forgot-password {
+            text-align: center;
+            color: #6c757d;
+            text-decoration: none;
+            margin-top: 15px;
+            display: block;
+        }
+        
+        .forgot-password:hover {
+            color: #3498db;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .demo-users {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .demo-users h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .demo-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .demo-login {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .system-status {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+            
+            .auth-left {
+                padding: 40px 30px;
+            }
+            
+            .auth-right {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <h1>🔬 AI Medical Diagnosis</h1>
+            <p>Advanced skin lesion detection powered by artificial intelligence with bias-aware analysis</p>
+            
+            <div class="system-status">
+                <span class="status-indicator"></span>
+                <strong>System Online</strong> - All AI models operational
+            </div>
+            
+            <ul class="features">
+                <li>Real-time AI skin lesion analysis</li>
+                <li>Confidence scoring and explanations</li>
+                <li>Fairness evaluation and bias detection</li>
+                <li>Comprehensive result visualization</li>
+                <li>Research-grade accuracy metrics</li>
+                <li>Secure data handling and privacy</li>
+            </ul>
+        </div>
+        
+        <div class="auth-right">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchTab('register')">Register</button>
+            </div>
+            
+            <div id="alerts"></div>
+            
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn">🚀 Access AI System</button>
+                
+                <a href="#" class="forgot-password">Forgot your password?</a>
+            </form>
+            
+            <!-- Register Form -->
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirm">Confirm Password</label>
+                    <input type="password" id="registerConfirm" name="confirm_password" required>
+                </div>
+                
+                <button type="submit" class="btn">🎯 Create Account & Access System</button>
+            </form>
+            
+            <!-- Demo Users -->
+            <div class="demo-users">
+                <h4>🧪 Demo Accounts (Development)</h4>
+                <div class="demo-user">
+                    <span><strong>Doctor:</strong> doctor@demo.com / demo123</span>
+                    <button class="demo-login" onclick="quickLogin('doctor@demo.com', 'demo123')">Quick Login</button>
+                </div>
+                <div class="demo-user">
+                    <span><strong>Researcher:</strong> researcher@demo.com / demo123</span>
+                    <button class="demo-login" onclick="quickLogin('researcher@demo.com', 'demo123')">Quick Login</button>
+                </div>
+                <div class="demo-user">
+                    <span><strong>Student:</strong> student@demo.com / demo123</span>
+                    <button class="demo-login" onclick="quickLogin('student@demo.com', 'demo123')">Quick Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+            
+            // Clear alerts
+            document.getElementById('alerts').innerHTML = '';
+        }
+        
+        function showAlert(message, type = 'error') {
+            const alertsContainer = document.getElementById('alerts');
+            alertsContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            
+            // Auto-hide success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertsContainer.innerHTML = '';
+                }, 3000);
+            }
+        }
+        
+        function quickLogin(email, password) {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+            switchTab('login');
+            document.querySelector('.auth-tab').click();
+            showAlert('Demo credentials loaded. Click "Access AI System" to continue.', 'success');
+        }
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAlert('Please enter both email and password.');
+                return;
+            }
+            
+            // Show loading
+            const btn = this.querySelector('.btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '🔄 Authenticating...';
+            btn.disabled = true;
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Check demo credentials or simulate authentication
+                if (isValidDemo(email, password) || isValidCredential(email, password)) {
+                    showAlert('Authentication successful! Redirecting to AI system...', 'success');
+                    
+                    // Store user session
+                    localStorage.setItem('user_session', JSON.stringify({
+                        email: email,
+                        name: getUserName(email),
+                        role: getUserRole(email),
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = '/dashboard/';
+                    }, 2000);
+                } else {
+                    showAlert('Invalid email or password. Please try again.');
+                }
+            } catch (error) {
+                showAlert('Authentication failed. Please try again.');
+            }
+            
+            // Reset button
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+        
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            if (!name || !email || !password || !confirm) {
+                showAlert('Please fill in all fields.');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showAlert('Passwords do not match.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters long.');
+                return;
+            }
+            
+            // Show loading
+            const btn = this.querySelector('.btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '🔄 Creating Account...';
+            btn.disabled = true;
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                showAlert('Account created successfully! Please log in.', 'success');
+                
+                // Switch to login tab
+                setTimeout(() => {
+                    switchTab('login');
+                    document.getElementById('loginEmail').value = email;
+                    document.querySelector('.auth-tab').click();
+                }, 2000);
+                
+            } catch (error) {
+                showAlert('Registration failed. Please try again.');
+            }
+            
+            // Reset button
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+        
+        function isValidDemo(email, password) {
+            const demoAccounts = {
+                'doctor@demo.com': 'demo123',
+                'researcher@demo.com': 'demo123',
+                'student@demo.com': 'demo123'
+            };
+            return demoAccounts[email] === password;
+        }
+        
+        function isValidCredential(email, password) {
+            // In production, this would be handled by backend authentication
+            return email.includes('@') && password.length >= 6;
+        }
+        
+        function getUserName(email) {
+            const names = {
+                'doctor@demo.com': 'Dr. Sarah Johnson',
+                'researcher@demo.com': 'Prof. Michael Chen',
+                'student@demo.com': 'Alex Thompson'
+            };
+            return names[email] || email.split('@')[0];
+        }
+        
+        function getUserRole(email) {
+            if (email.includes('doctor')) return 'Doctor';
+            if (email.includes('researcher')) return 'Researcher';
+            if (email.includes('student')) return 'Student';
+            return 'User';
+        }
+        
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const session = localStorage.getItem('user_session');
+            if (session) {
+                const userData = JSON.parse(session);
+                showAlert(`Welcome back, ${userData.name}! Redirecting to dashboard...`, 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard/';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

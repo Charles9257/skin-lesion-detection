@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Feedback{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">User Feedback</h2>
+<form method="post" action="{% url 'submit_feedback' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="rating" class="form-label">Rate your experience (1-5)</label>
+        <select class="form-select" id="rating" name="rating" required>
+            <option value="1">1 - Very Poor</option>
+            <option value="2">2 - Poor</option>
+            <option value="3">3 - Neutral</option>
+            <option value="4">4 - Good</option>
+            <option value="5">5 - Excellent</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="comments" class="form-label">Additional Comments</label>
+        <textarea class="form-control" id="comments" name="comments" rows="4"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Submit Feedback</button>
+</form>
+{% endblock %}
