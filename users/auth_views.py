@@ -28,13 +28,14 @@ def login_api(request):
     """API endpoint for user login with demo account support"""
     try:
         data = json.loads(request.body)
-        username = data.get('username')
+        # Handle both 'username' and 'email' from frontend
+        username = data.get('username') or data.get('email')
         password = data.get('password')
         
         if not username or not password:
             return JsonResponse({
                 'success': False,
-                'message': 'Username and password are required'
+                'message': 'Email/Username and password are required'
             }, status=400)
         
         # Check for demo accounts first
@@ -72,6 +73,14 @@ def login_api(request):
                 }
             })
         
+        # Try to find user by email if username looks like email
+        if '@' in username:
+            try:
+                user_obj = User.objects.get(email=username)
+                username = user_obj.username
+            except User.DoesNotExist:
+                pass
+        
         # Try regular authentication
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -89,7 +98,7 @@ def login_api(request):
         else:
             return JsonResponse({
                 'success': False,
-                'message': 'Invalid username or password'
+                'message': 'Invalid email or password'
             }, status=400)
             
     except json.JSONDecodeError:
