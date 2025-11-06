@@ -20,7 +20,7 @@ def auth_view(request):
     """Combined authentication view"""
     if request.user.is_authenticated:
         return redirect('users:user-dashboard')
-    return render(request, 'users/auth.html')
+    return render(request, 'auth.html')
 
 @csrf_exempt
 @require_http_methods(["POST"])

@@ -11,6 +11,8 @@ from .auth_views import (
     profile_view
 )
 
+app_name = 'users'
+
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     
