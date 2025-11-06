@@ -1,14 +1,150 @@
 {% extends "base.html" %}
-{% block title %}Upload Image{% endblock %}
+{% load static %}
+{% block title %}Upload Image - AI Skin Lesion Analysis{% endblock %}
+
+{% block extra_head %}
+<style>
+.upload-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 0 10px;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<h2 class="mb-3">Upload Skin Lesion Image</h2>
-<form method="post" enctype="multipart/form-data" action="{% url 'classify' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label for="image" class="form-label">Choose Image</label>
-        <input type="file" class="form-control" id="image" name="image" required>
+<div class="upload-container">
+    <!-- Header Section -->
+    <div class="text-center mb-4">
+        <h1 class="display-6 mb-3">
+            <i class="fas fa-microscope me-2 text-primary"></i>
+            AI Skin Lesion Analysis
+        </h1>
+        <p class="lead text-muted">
+            Upload a skin lesion image for professional AI-powered analysis
+        </p>
     </div>
-    <button type="submit" class="btn btn-primary">Classify</button>
-</form>
+
+    <!-- Upload Form Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-upload me-2"></i>
+                Upload Your Image
+            </h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" action="{% url 'classify' %}" id="uploadForm">
+                {% csrf_token %}
+                
+                <!-- Drag & Drop Upload Area -->
+                <div class="upload-area mb-4" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #007bff; margin-bottom: 1rem;"></i>
+                    <h4>Drop your image here or click to browse</h4>
+                    <p class="text-muted mb-3">Supports JPEG, JPG, PNG (max 5MB)</p>
+                    <input type="file" class="form-control d-none" id="image" name="image" 
+                           accept="image/jpeg,image/jpg,image/png" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-brain me-2"></i>
+                        Start AI Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Information Cards -->
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt text-success mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">Secure & Private</h5>
+                    <p class="card-text small">Your images are processed securely and not stored permanently.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-lightning-bolt text-warning mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">Fast Analysis</h5>
+                    <p class="card-text small">Get AI-powered results in seconds with confidence scores.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center">
+                    <i class="fas fa-graduation-cap text-info mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">Research Grade</h5>
+                    <p class="card-text small">Powered by advanced AI trained on medical datasets.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guidelines Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                Image Guidelines for Best Results
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-success">✅ Recommended:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Clear, well-lit images</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Close-up view of the lesion</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Minimal shadows or reflections</li>
+                        <li><i class="fas fa-check text-success me-2"></i>JPEG, JPG, or PNG format</li>
+                        <li><i class="fas fa-check text-success me-2"></i>File size under 5MB</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-danger">❌ Avoid:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-times text-danger me-2"></i>Blurry or out-of-focus images</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Poor lighting conditions</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Images with filters applied</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Multiple lesions in one image</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Images with text overlays</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="alert alert-info mt-4" role="alert">
+        <h6 class="alert-heading">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Medical Disclaimer
+        </h6>
+        <p class="mb-0">
+            This AI analysis is for research and educational purposes only. 
+            <strong>It is not a substitute for professional medical diagnosis.</strong> 
+            Please consult with a qualified healthcare provider for any medical concerns.
+        </p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize upload functionality is handled by the main script.js
+    console.log('Upload page loaded with responsive features');
+});
+</script>
 {% endblock %}
