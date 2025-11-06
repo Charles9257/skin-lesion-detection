@@ -71,12 +71,26 @@ def dashboard_view(request):
     from django.shortcuts import redirect
     return redirect('/users/dashboard/')
 
+def upload_view(request):
+    """Upload interface for skin lesion images"""
+    return render(request, 'upload.html')
+
+def results_view(request):
+    """Results interface for analysis results"""
+    return render(request, 'results.html')
+
+def feedback_view(request):
+    """Feedback interface for user feedback"""
+    return render(request, 'feedback.html')
+
 urlpatterns = [
     path("", RootIndexView.as_view(), name="root-index"),
     path("test/", test_upload_view, name="test-upload"),
     path("study/", user_study_view, name="user-study"),
     path("auth/", auth_view, name="auth"),
     path("dashboard/", dashboard_view, name="dashboard"),
+    path("upload/", upload_view, name="upload"),
+    path("results/", results_view, name="results"),
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
     path("feedback/", include("feedback.urls")),

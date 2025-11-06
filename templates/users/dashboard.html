@@ -223,16 +223,16 @@
     <div class="quick-actions">
         <h2>Quick Actions</h2>
         <div class="action-buttons">
-            <a href="/test/" class="action-btn">
+            <a href="{% url 'upload' %}" class="action-btn">
                 <i class="fas fa-upload"></i> Upload New Image
             </a>
             <a href="{% url 'users:user-profile' %}" class="action-btn">
                 <i class="fas fa-user"></i> Manage Profile
             </a>
-            <a href="/api/" class="action-btn">
-                <i class="fas fa-chart-line"></i> View API
+            <a href="{% url 'results' %}" class="action-btn">
+                <i class="fas fa-chart-line"></i> View Results
             </a>
-            <a href="/feedback/" class="action-btn">
+            <a href="{% url 'feedback' %}" class="action-btn">
                 <i class="fas fa-comment"></i> Give Feedback
             </a>
         </div>
