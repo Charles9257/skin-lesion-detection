@@ -9,7 +9,13 @@ export DJANGO_SETTINGS_MODULE=backend.settings
 
 # Install dependencies
 echo "Installing dependencies..."
-pip install -r requirements.txt
+if [ -f "requirements-railway.txt" ]; then
+    echo "Using Railway-optimized requirements..."
+    pip install -r requirements-railway.txt
+else
+    echo "Using standard requirements..."
+    pip install -r requirements.txt
+fi
 
 # Collect static files
 echo "Collecting static files..."
