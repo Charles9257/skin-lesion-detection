@@ -541,11 +541,14 @@ original_index = default_admin.site.index
 
 def professional_analytics_index(self, request, extra_context=None):
     """Override default admin index with professional analytics dashboard"""
+    print("🔍 CUSTOM ADMIN INDEX CALLED - Loading professional analytics dashboard")
     extra_context = extra_context or {}
 
     # Core AI Analysis Metrics
     total_images = ImageUpload.objects.count()
     total_predictions = ImageUpload.objects.exclude(prediction='').count()
+    
+    print(f"📊 Analytics data: {total_images} images, {total_predictions} predictions")
     
     # Enhanced result tracking
     cancer_detections = ImageUpload.objects.filter(result='cancer').count()
@@ -602,7 +605,8 @@ def professional_analytics_index(self, request, extra_context=None):
         # Critical fairness analysis
         'fairness_metrics': fairness_metrics
     }
-
+    
+    print("✅ Custom analytics data prepared, calling original_index")
     return original_index(request, extra_context)
 
 # Override the default admin site's index method for professional dashboard
