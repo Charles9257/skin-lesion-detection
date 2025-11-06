@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login - Skin Lesion Detection{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+    }
+    
+    .auth-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        animation: slideUp 0.6s ease-out;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-header h1 {
+        color: #333;
+        font-size: 2.2rem;
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+    
+    .auth-header p {
+        color: #666;
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+    .auth-tabs {
+        display: flex;
+        margin-bottom: 30px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 5px;
+    }
+    
+    .auth-tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        color: #666;
+    }
+    
+    .auth-tab.active {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .auth-form {
+        display: none;
+    }
+    
+    .auth-form.active {
+        display: block;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn-auth {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+    
+    .btn-auth:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-auth:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .alert {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .auth-footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .loading {
+        display: none;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .auth-card {
+            margin: 20px;
+            padding: 30px 25px;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Welcome</h1>
+            <p>Sign in to access your account</p>
+        </div>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+            <div class="auth-tab" onclick="switchTab('register')">Register</div>
+        </div>
+        
+        <div id="error-message" class="alert alert-error" style="display: none;"></div>
+        <div id="success-message" class="alert alert-success" style="display: none;"></div>
+        
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form active">
+            <div class="form-group">
+                <label for="login-username">Username</label>
+                <input type="text" id="login-username" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn-auth">Sign In</button>
+            
+            <div class="loading">
+                <div class="spinner"></div>
+                <span>Signing in...</span>
+            </div>
+        </form>
+        
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form">
+            <div class="form-group">
+                <label for="register-username">Username</label>
+                <input type="text" id="register-username" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-firstname">First Name</label>
+                <input type="text" id="register-firstname" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-lastname">Last Name</label>
+                <input type="text" id="register-lastname" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-confirm">Confirm Password</label>
+                <input type="password" id="register-confirm" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn-auth">Create Account</button>
+            
+            <div class="loading">
+                <div class="spinner"></div>
+                <span>Creating account...</span>
+            </div>
+        </form>
+        
+        <div class="auth-footer">
+            <p>&copy; 2025 Skin Lesion Detection System</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function switchTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update forms
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.getElementById(tab + '-form').classList.add('active');
+    
+    // Clear messages
+    clearMessages();
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    document.getElementById('success-message').style.display = 'none';
+}
+
+function showSuccess(message) {
+    const successDiv = document.getElementById('success-message');
+    successDiv.textContent = message;
+    successDiv.style.display = 'block';
+    document.getElementById('error-message').style.display = 'none';
+}
+
+function clearMessages() {
+    document.getElementById('error-message').style.display = 'none';
+    document.getElementById('success-message').style.display = 'none';
+}
+
+function showLoading(form) {
+    const button = form.querySelector('.btn-auth');
+    const loading = form.querySelector('.loading');
+    button.disabled = true;
+    loading.style.display = 'block';
+}
+
+function hideLoading(form) {
+    const button = form.querySelector('.btn-auth');
+    const loading = form.querySelector('.loading');
+    button.disabled = false;
+    loading.style.display = 'none';
+}
+
+// Login Form Handler
+document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearMessages();
+    
+    const form = this;
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+    
+    if (!username || !password) {
+        showError('Please fill in all fields');
+        return;
+    }
+    
+    showLoading(form);
+    
+    try {
+        const response = await fetch('{% url "users:login-api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showSuccess('Login successful! Redirecting...');
+            setTimeout(() => {
+                window.location.href = data.redirect_url || '{% url "users:user-dashboard" %}';
+            }, 1000);
+        } else {
+            showError(data.message || 'Login failed');
+        }
+    } catch (error) {
+        showError('Connection error. Please try again.');
+    }
+    
+    hideLoading(form);
+});
+
+// Register Form Handler
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearMessages();
+    
+    const form = this;
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const firstName = document.getElementById('register-firstname').value;
+    const lastName = document.getElementById('register-lastname').value;
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('register-confirm').value;
+    
+    if (!username || !email || !password || !confirmPassword) {
+        showError('Please fill in all required fields');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+    }
+    
+    if (password.length < 8) {
+        showError('Password must be at least 8 characters long');
+        return;
+    }
+    
+    showLoading(form);
+    
+    try {
+        const response = await fetch('{% url "users:register-api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                first_name: firstName,
+                last_name: lastName,
+                password: password
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showSuccess('Account created successfully! Redirecting...');
+            setTimeout(() => {
+                window.location.href = data.redirect_url || '{% url "users:user-dashboard" %}';
+            }, 1000);
+        } else {
+            showError(data.message || 'Registration failed');
+        }
+    } catch (error) {
+        showError('Connection error. Please try again.');
+    }
+    
+    hideLoading(form);
+});
+
+// Auto-focus first input
+document.getElementById('login-username').focus();
+</script>
+{% endblock %}

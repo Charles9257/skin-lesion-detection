@@ -4,7 +4,7 @@ Authentication Views for User Login/Register System
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +13,7 @@ from django.contrib import messages
 import json
 import logging
 
+User = get_user_model()  # This gets the CustomUser model
 logger = logging.getLogger(__name__)
 
 def auth_view(request):
