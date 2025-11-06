@@ -608,6 +608,9 @@ def professional_analytics_index(self, request, extra_context=None):
 # Override the default admin site's index method for professional dashboard
 default_admin.site.index = professional_analytics_index.__get__(default_admin.site, default_admin.site.__class__)
 
+# Ensure custom template is used
+default_admin.site.index_template = 'admin/index.html'
+
 # Professional site headers for default admin
 default_admin.site.site_header = '🩺 Skin Lesion AI - Professional Research Dashboard'
 default_admin.site.site_title = 'Skin Lesion AI Research Admin'
