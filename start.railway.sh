@@ -3,6 +3,10 @@
 # Railway startup script
 echo "Starting Railway deployment..."
 
+# Set production environment variables
+export DEBUG=False
+export DJANGO_SETTINGS_MODULE=backend.settings
+
 # Install dependencies
 echo "Installing dependencies..."
 pip install -r requirements.txt

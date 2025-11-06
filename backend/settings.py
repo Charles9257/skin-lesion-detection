@@ -46,6 +46,28 @@ if RAILWAY_STATIC_URL:
     if railway_domain not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(railway_domain)
 
+# Add Railway domain pattern for production
+if not DEBUG:
+    ALLOWED_HOSTS.extend([
+        "web-production-d952d.up.railway.app",
+        "*.up.railway.app",
+        ".railway.app"
+    ])
+
+# CSRF Settings for Railway deployment
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-d952d.up.railway.app",
+    "https://*.up.railway.app",
+    "https://*.railway.app"
+]
+
+# Add local development origins
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS.extend([
+        "http://localhost:8000",
+        "http://127.0.0.1:8000"
+    ])
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -88,7 +110,16 @@ MIDDLEWARE = [
 ]
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+CORS_ALLOWED_ORIGINS_ENV = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
+CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS_ENV.split(",")
+
+# Add Railway domain to CORS origins
+if not DEBUG:
+    CORS_ALLOWED_ORIGINS.extend([
+        "https://web-production-d952d.up.railway.app",
+        "https://*.up.railway.app"
+    ])
+
 CORS_ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "True").lower() == "true"
 
 ROOT_URLCONF = 'backend.urls'
