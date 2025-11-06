@@ -38,9 +38,23 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run migrations
-        run: python backend/manage.py migrate
+        env:
+          DJANGO_SETTINGS_MODULE: backend.settings
+          DB_NAME: skin_lesion_db
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: python manage.py migrate
 
       - name: Run tests
+        env:
+          DJANGO_SETTINGS_MODULE: backend.settings
+          DB_NAME: skin_lesion_db
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: 5432
         run: pytest --maxfail=1 --disable-warnings -q
 
   docker-build:

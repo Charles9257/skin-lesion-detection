@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Add PyMySQL support conditionally
 try:
@@ -64,6 +65,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,8 +101,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Database configuration with MySQL/SQLite fallback
-if PYMYSQL_AVAILABLE and os.getenv("DB_NAME"):
+# Database configuration with DATABASE_URL for production (Render)
+if os.getenv("DATABASE_URL"):
+    # Production database configuration from DATABASE_URL
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
+    }
+elif PYMYSQL_AVAILABLE and os.getenv("DB_NAME"):
     # Use MySQL if PyMySQL is available and environment variables are set
     DATABASES = {
         "default": {
