@@ -263,11 +263,11 @@ def dashboard_view(request):
             'system_health': 'Good',
             'last_backup': timezone.now(),
         }
-        return render(request, 'users/dashboard.html', context)
+        return render(request, 'dashboard.html', context)
     except Exception as e:
         logger.error(f"Dashboard error: {e}")
         messages.error(request, "Error loading dashboard")
-        return render(request, 'users/dashboard.html', {'user': request.user})
+        return render(request, 'dashboard.html', {'user': request.user})
 
 def logout_view(request):
     """Logout view"""

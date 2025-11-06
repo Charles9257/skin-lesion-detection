@@ -66,8 +66,7 @@ def auth_view(request):
     return render(request, 'auth.html')
 
 def dashboard_view(request):
-    """Main dashboard interface - handled by users app authentication"""
-    # Redirect to users app dashboard which handles authentication
+    """Main dashboard interface - redirect to authenticated dashboard"""
     from django.shortcuts import redirect
     return redirect('/users/dashboard/')
 
