@@ -270,10 +270,17 @@ def dashboard_view(request):
         return render(request, 'dashboard.html', {'user': request.user})
 
 def logout_view(request):
-    """Logout view"""
-    logout(request)
-    messages.success(request, 'You have been logged out successfully.')
-    return redirect('users:user-auth')
+    """Logout view with proper redirect"""
+    from django.contrib.auth import logout
+    from django.contrib import messages
+    from django.shortcuts import redirect
+    
+    if request.user.is_authenticated:
+        username = request.user.username
+        logout(request)
+        messages.success(request, f'You have been logged out successfully, {username}.')
+    
+    return redirect('/users/auth/')
 
 def check_session(request):
     """Check if user session is active"""
