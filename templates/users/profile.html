@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Skin Lesion Detection{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.profile-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-info-item {
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+}
+
+.profile-info-item:last-child {
+    border-bottom: none;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.activity-timeline {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #667eea, #764ba2);
+}
+
+.activity-item {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 1.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #667eea;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #f8f9fa;
+}
+
+.stats-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.btn-outline-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.btn-outline-primary:hover {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Profile Header -->
+<div class="profile-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center">
+                <img src="https://ui-avatars.com/api/?name={{ user.first_name|default:user.username }}&background=667eea&color=fff&size=120&rounded=true" 
+                     alt="Profile Avatar" class="profile-avatar">
+            </div>
+            <div class="col-md-6">
+                <h1 class="mb-1">{{ user.first_name|default:user.username }} {{ user.last_name }}</h1>
+                <p class="mb-1">{{ user.email }}</p>
+                <small class="opacity-75">Member since {{ user.date_joined|date:"F Y" }}</small>
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn edit-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-8">
+            <div class="profile-card">
+                <h3 class="mb-4"><i class="fas fa-user me-2"></i>Profile Information</h3>
+                
+                <div class="profile-info-item">
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Username:</strong></div>
+                        <div class="col-sm-9">{{ user.username }}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-info-item">
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Email:</strong></div>
+                        <div class="col-sm-9">{{ user.email }}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-info-item">
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Full Name:</strong></div>
+                        <div class="col-sm-9">{{ user.first_name }} {{ user.last_name }}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-info-item">
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Account Type:</strong></div>
+                        <div class="col-sm-9">
+                            {% if user.is_staff %}
+                                <span class="badge bg-danger">Administrator</span>
+                            {% else %}
+                                <span class="badge bg-primary">User</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-info-item">
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Last Login:</strong></div>
+                        <div class="col-sm-9">{{ user.last_login|date:"M d, Y H:i" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="profile-card">
+                <h3 class="mb-4"><i class="fas fa-history me-2"></i>Recent Activity</h3>
+                
+                <div class="activity-timeline">
+                    <div class="activity-item">
+                        <div class="fw-bold">Profile Updated</div>
+                        <small class="text-muted">{{ user.last_login|timesince }} ago</small>
+                        <div class="text-muted">Last profile modification</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="fw-bold">Last Login</div>
+                        <small class="text-muted">{{ user.last_login|timesince }} ago</small>
+                        <div class="text-muted">Logged in to the system</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="fw-bold">Account Created</div>
+                        <small class="text-muted">{{ user.date_joined|timesince }} ago</small>
+                        <div class="text-muted">Account registration completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Statistics -->
+            <div class="profile-card">
+                <h4 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Your Statistics</h4>
+                
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="stats-card">
+                            <div class="stats-number">{{ uploads_count|default:0 }}</div>
+                            <div class="text-muted">Image Uploads</div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="stats-card">
+                            <div class="stats-number">{{ analyses_count|default:0 }}</div>
+                            <div class="text-muted">Analyses</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stats-card">
+                            <div class="stats-number">{{ feedback_count|default:0 }}</div>
+                            <div class="text-muted">Feedback Given</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stats-card">
+                            <div class="stats-number">{{ days_active|default:0 }}</div>
+                            <div class="text-muted">Days Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="profile-card">
+                <h4 class="mb-4"><i class="fas fa-bolt me-2"></i>Quick Actions</h4>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'api:upload' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Image
+                    </a>
+                    <a href="{% url 'feedback:feedback-form' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-comment me-2"></i>Give Feedback
+                    </a>
+                    <a href="{% url 'users:user-dashboard' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-tachometer-alt me-2"></i>View Dashboard
+                    </a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-danger">
+                        <i class="fas fa-cog me-2"></i>Admin Panel
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="profile-card">
+                <h4 class="mb-4"><i class="fas fa-cog me-2"></i>Account Settings</h4>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <i class="fas fa-lock me-2"></i>Change Password
+                    </button>
+                    <button class="btn btn-outline-warning">
+                        <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                    <button class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'users:user-profile' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'users:user-profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="change_password">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password1" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password2" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="new_password2" name="new_password2" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle profile form submission
+    const profileForm = document.querySelector('#editProfileModal form');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            submitBtn.disabled = true;
+        });
+    }
+
+    // Handle password change form
+    const passwordForm = document.querySelector('#changePasswordModal form');
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', function(e) {
+            const newPassword1 = this.querySelector('#new_password1').value;
+            const newPassword2 = this.querySelector('#new_password2').value;
+            
+            if (newPassword1 !== newPassword2) {
+                e.preventDefault();
+                alert('New passwords do not match!');
+                return false;
+            }
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Changing...';
+            submitBtn.disabled = true;
+        });
+    }
+
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        });
+    }, 5000);
+});
+</script>
+{% endblock %}

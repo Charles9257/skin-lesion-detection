@@ -7,7 +7,8 @@ from .auth_views import (
     dashboard_view, 
     logout_view, 
     check_session,
-    demo_data_api
+    demo_data_api,
+    profile_view
 )
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     
     # Authentication endpoints
     path("auth/", auth_view, name="user-auth"),
+    path("profile/", profile_view, name="user-profile"),
     path("login/", login_api, name="login-api"),
     path("register-api/", register_api, name="register-api"),
     path("logout/", logout_view, name="logout"),
