@@ -410,29 +410,40 @@
             btn.disabled = true;
             
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Call the user login API
+                const response = await fetch('/users/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
                 
-                // Check demo credentials or simulate authentication
-                if (isValidDemo(email, password) || isValidCredential(email, password)) {
+                const data = await response.json();
+                
+                if (data.success) {
                     showAlert('Authentication successful! Redirecting to AI system...', 'success');
                     
                     // Store user session
                     localStorage.setItem('user_session', JSON.stringify({
-                        email: email,
-                        name: getUserName(email),
-                        role: getUserRole(email),
+                        email: data.user.email,
+                        name: data.user.name,
+                        role: data.user.role,
                         loginTime: new Date().toISOString()
                     }));
                     
                     // Redirect to dashboard
                     setTimeout(() => {
-                        window.location.href = '/dashboard/';
-                    }, 2000);
+                        window.location.href = '/users/dashboard/';
+                    }, 1500);
                 } else {
-                    showAlert('Invalid email or password. Please try again.');
+                    showAlert(data.error || 'Invalid email or password. Please try again.');
                 }
             } catch (error) {
+                console.error('Login error:', error);
                 showAlert('Authentication failed. Please try again.');
             }
             
@@ -472,19 +483,37 @@
             btn.disabled = true;
             
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Call the user registration API
+                const response = await fetch('/users/register-api/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password,
+                        confirm_password: confirm
+                    })
+                });
                 
-                showAlert('Account created successfully! Please log in.', 'success');
+                const data = await response.json();
                 
-                // Switch to login tab
-                setTimeout(() => {
-                    switchTab('login');
-                    document.getElementById('loginEmail').value = email;
-                    document.querySelector('.auth-tab').click();
-                }, 2000);
+                if (data.success) {
+                    showAlert('Account created successfully! Please log in.', 'success');
+                    
+                    // Switch to login tab
+                    setTimeout(() => {
+                        switchTab('login');
+                        document.getElementById('loginEmail').value = email;
+                        document.querySelector('.auth-tab').click();
+                    }, 2000);
+                } else {
+                    showAlert(data.error || 'Registration failed. Please try again.');
+                }
                 
             } catch (error) {
+                console.error('Registration error:', error);
                 showAlert('Registration failed. Please try again.');
             }
             
@@ -525,14 +554,20 @@
         
         // Check if user is already logged in
         window.addEventListener('load', function() {
-            const session = localStorage.getItem('user_session');
-            if (session) {
-                const userData = JSON.parse(session);
-                showAlert(`Welcome back, ${userData.name}! Redirecting to dashboard...`, 'success');
-                setTimeout(() => {
-                    window.location.href = '/dashboard/';
-                }, 2000);
-            }
+            // Check session with server
+            fetch('/users/session/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.authenticated) {
+                        showAlert(`Welcome back, ${data.user.name}! Redirecting to dashboard...`, 'success');
+                        setTimeout(() => {
+                            window.location.href = '/users/dashboard/';
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.log('Session check failed:', error);
+                });
         });
     </script>
 </body>

@@ -21,7 +21,6 @@ from django.views import View
 from django.shortcuts import render
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.decorators import login_required
 
 class RootIndexView(View):
     """Root index view showing all available app endpoints"""
@@ -66,10 +65,11 @@ def auth_view(request):
     """Authentication interface for login/register"""
     return render(request, 'auth.html')
 
-@login_required
 def dashboard_view(request):
-    """Main dashboard interface after login - requires authentication"""
-    return render(request, 'dashboard.html')
+    """Main dashboard interface - handled by users app authentication"""
+    # Redirect to users app dashboard which handles authentication
+    from django.shortcuts import redirect
+    return redirect('/users/dashboard/')
 
 urlpatterns = [
     path("", RootIndexView.as_view(), name="root-index"),

@@ -181,24 +181,15 @@ def register_api(request):
             'error': 'Registration failed. Please try again.'
         }, status=500)
 
+@login_required
 def dashboard_view(request):
-    """Main dashboard view for authenticated users"""
-    # For demo purposes, we'll allow access without strict authentication
-    # In production, you'd want: @login_required decorator
+    """Main dashboard view for authenticated users - requires login"""
     
     user_data = {
-        'name': 'Demo User',
-        'email': 'user@demo.com',
+        'name': request.user.get_full_name() or request.user.username,
+        'email': request.user.email,
         'role': 'User'
     }
-    
-    # If user is authenticated, get real user data
-    if request.user.is_authenticated:
-        user_data = {
-            'name': request.user.get_full_name() or request.user.username,
-            'email': request.user.email,
-            'role': 'User'
-        }
     
     return render(request, 'dashboard.html', {
         'user': user_data,
