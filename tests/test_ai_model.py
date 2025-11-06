@@ -28,11 +28,16 @@ class PreprocessingTestCase(unittest.TestCase):
         # Create a temporary image file
         self.temp_image = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
         Image.fromarray(self.test_image).save(self.temp_image.name)
+        self.temp_image.close()  # Ensure file is closed after writing
         
     def tearDown(self):
         """Clean up temporary files"""
-        if os.path.exists(self.temp_image.name):
-            os.unlink(self.temp_image.name)
+        try:
+            if hasattr(self, 'temp_image') and os.path.exists(self.temp_image.name):
+                os.unlink(self.temp_image.name)
+        except (PermissionError, OSError):
+            # On Windows, sometimes files are still locked - skip deletion
+            pass
     
     def test_resize_image(self):
         """Test image resizing function"""

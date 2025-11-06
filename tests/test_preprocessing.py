@@ -24,7 +24,7 @@ class ImagePreprocessingTestCase(unittest.TestCase):
         self.grayscale_image = np.random.randint(0, 255, (200, 200), dtype=np.uint8)
         
         # Create images with specific lighting conditions
-        self.dark_image = np.full((200, 200, 3), 50, dtype=np.uint8)  # Dark image
+        self.dark_image = np.random.randint(10, 60, (200, 200, 3), dtype=np.uint8)  # Dark image with variation
         self.bright_image = np.full((200, 200, 3), 200, dtype=np.uint8)  # Bright image
         
         # Create temporary files
@@ -45,11 +45,11 @@ class ImagePreprocessingTestCase(unittest.TestCase):
     
     def test_resize_preserves_aspect_ratio(self):
         """Test that resizing maintains proper dimensions"""
-        original_shape = self.color_image.shape
+        original_dtype = self.color_image.dtype
         resized = resize_image(self.color_image, size=(224, 224))
         
         self.assertEqual(resized.shape, (224, 224, 3))
-        self.assertEqual(resized.dtype, original_shape)
+        self.assertEqual(resized.dtype, original_dtype)
     
     def test_resize_different_input_sizes(self):
         """Test resizing with various input dimensions"""
