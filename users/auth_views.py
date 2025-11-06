@@ -25,7 +25,7 @@ def auth_view(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def login_api(request):
-    """API endpoint for user login"""
+    """API endpoint for user login with demo account support"""
     try:
         data = json.loads(request.body)
         username = data.get('username')
@@ -37,6 +37,42 @@ def login_api(request):
                 'message': 'Username and password are required'
             }, status=400)
         
+        # Check for demo accounts first
+        demo_accounts = {
+            'doctor@demo.com': 'demo123',
+            'researcher@demo.com': 'demo123',
+            'student@demo.com': 'demo123'
+        }
+        
+        if username in demo_accounts and demo_accounts[username] == password:
+            # Create or get demo user
+            demo_username = username.split('@')[0] + '_demo'
+            demo_user, created = User.objects.get_or_create(
+                username=demo_username,
+                defaults={
+                    'email': username,
+                    'first_name': username.split('@')[0].title(),
+                    'last_name': 'Demo',
+                    'is_active': True
+                }
+            )
+            if created:
+                demo_user.set_password(password)
+                demo_user.save()
+            
+            login(request, demo_user)
+            return JsonResponse({
+                'success': True,
+                'message': 'Demo login successful',
+                'redirect_url': '/users/dashboard/',
+                'user': {
+                    'username': demo_user.username,
+                    'email': demo_user.email,
+                    'is_staff': demo_user.is_staff
+                }
+            })
+        
+        # Try regular authentication
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
