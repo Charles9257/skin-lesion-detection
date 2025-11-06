@@ -15,6 +15,10 @@ python manage.py collectstatic --noinput
 echo "Running migrations..."
 python manage.py migrate
 
+# Create superuser automatically
+echo "Creating admin user..."
+python create_admin.py
+
 # Start the server
 echo "Starting Django server..."
 port=${PORT:-8000}
