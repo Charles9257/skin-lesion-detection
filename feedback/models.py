@@ -5,6 +5,42 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 User = get_user_model()
 
 
+# New model for System Usability and Trust Survey (2025)
+class UsabilityTrustSurvey(models.Model):
+    """Detailed system usability and trust survey for qualitative analytics."""
+    LIKERT_CHOICES = [
+        (1, 'Strongly Disagree'),
+        (2, 'Disagree'),
+        (3, 'Neutral'),
+        (4, 'Agree'),
+        (5, 'Strongly Agree'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='usability_trust_surveys')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    # Likert-scale questions (1-11)
+    q1_interface_intuitive = models.IntegerField(choices=LIKERT_CHOICES)
+    q2_layout_design_clear = models.IntegerField(choices=LIKERT_CHOICES)
+    q3_response_time_satisfactory = models.IntegerField(choices=LIKERT_CHOICES)
+    q4_steps_understandable = models.IntegerField(choices=LIKERT_CHOICES)
+    q5_results_clear = models.IntegerField(choices=LIKERT_CHOICES)
+    q6_visual_explanations_helpful = models.IntegerField(choices=LIKERT_CHOICES)
+    q7_fairness_metrics_understandable = models.IntegerField(choices=LIKERT_CHOICES)
+    q8_fair_predictions = models.IntegerField(choices=LIKERT_CHOICES)
+    q9_info_and_control_sufficient = models.IntegerField(choices=LIKERT_CHOICES)
+    q10_overall_satisfaction = models.IntegerField(choices=LIKERT_CHOICES)
+    q11_recommend_system = models.IntegerField(choices=LIKERT_CHOICES)
+
+    # Optional short answer questions
+    most_helpful_feature = models.TextField(blank=True)
+    improvement_suggestion = models.TextField(blank=True)
+    noticed_limitations = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"UsabilityTrustSurvey by {self.user.username} at {self.submitted_at}"  
+
+
 class Feedback(models.Model):
     """Legacy feedback model - kept for backward compatibility"""
     rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])

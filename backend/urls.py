@@ -22,36 +22,10 @@ from django.shortcuts import render
 from django.conf import settings
 from django.conf.urls.static import static
 
-class RootIndexView(View):
-    """Root index view showing all available app endpoints"""
-    def get(self, request):
-        return JsonResponse({
-            'message': 'Skin Lesion Detection Project API',
-            'version': '1.0.0',
-            'available_apps': {
-                '/admin/': 'Django admin interface',
-                '/api/': 'Main API endpoints for image analysis',
-                '/feedback/': 'User feedback collection endpoints',
-                '/users/': 'User management endpoints',
-                '/test/': 'Testing interface for image uploads',
-                '/study/': 'User study interface for research participation'
-            },
-            'main_endpoints': {
-                '/api/upload/': 'POST - Upload skin lesion image for AI analysis',
-                '/api/study/': 'GET - Access user study interface',
-                '/api/study/submit/': 'POST - Submit user study data',
-                '/feedback/': 'GET/POST - Collect user feedback',
-                '/users/register/': 'POST - Register new user',
-                '/test/': 'GET - Test interface for image analysis'
-            },
-            'research_endpoints': {
-                '/study/': 'GET - Main user study interface',
-                '/api/study/statistics/': 'GET - Study participation statistics',
-                '/api/study/export/': 'POST - Export study data for analysis'
-            },
-            'status': 'running',
-            'django_version': '5.2.3'
-        })
+
+# Landing page view
+def landing_view(request):
+    return render(request, 'landing.html')
 
 def test_upload_view(request):
     """Test interface for image upload and analysis"""
@@ -83,7 +57,7 @@ def feedback_view(request):
     return render(request, 'feedback.html')
 
 urlpatterns = [
-    path("", RootIndexView.as_view(), name="root-index"),
+    path("", landing_view, name="root-index"),
     path("test/", test_upload_view, name="test-upload"),
     path("study/", user_study_view, name="user-study"),
     path("auth/", auth_view, name="auth"),

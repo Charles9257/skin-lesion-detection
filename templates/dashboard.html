@@ -686,58 +686,12 @@
             Provide Feedback
         </div>
         
-        <div class="feedback-form">
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <label>Overall System Rating</label>
-                    <div class="rating-group" id="overallRating">
-                        <span class="rating-star" onclick="setRating('overall', 1)">⭐</span>
-                        <span class="rating-star" onclick="setRating('overall', 2)">⭐</span>
-                        <span class="rating-star" onclick="setRating('overall', 3)">⭐</span>
-                        <span class="rating-star" onclick="setRating('overall', 4)">⭐</span>
-                        <span class="rating-star" onclick="setRating('overall', 5)">⭐</span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="trustLevel">Trust in AI Predictions</label>
-                    <select id="trustLevel">
-                        <option value="">Select trust level</option>
-                        <option value="very-high">Very High</option>
-                        <option value="high">High</option>
-                        <option value="moderate">Moderate</option>
-                        <option value="low">Low</option>
-                        <option value="very-low">Very Low</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="biasPerception">Do you perceive any bias in the AI system?</label>
-                    <select id="biasPerception">
-                        <option value="">Select perception</option>
-                        <option value="no-bias">No bias detected</option>
-                        <option value="slight-bias">Slight bias</option>
-                        <option value="moderate-bias">Moderate bias</option>
-                        <option value="significant-bias">Significant bias</option>
-                        <option value="unsure">Unsure</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="improvements">Suggestions for Improvement</label>
-                    <textarea id="improvements" placeholder="Share your thoughts on how we can improve the system..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="additionalComments">Additional Comments</label>
-                    <textarea id="additionalComments" placeholder="Any other feedback or observations..."></textarea>
-                </div>
-                
-                <button type="submit" class="btn">
-                    <i class="fas fa-paper-plane me-2"></i>
-                    Submit Feedback
-                </button>
-            </form>
+        <div class="feedback-form text-center">
+            <p class="mb-3">We value your experience! Please help us improve by completing our detailed System Usability and Trust Survey.</p>
+            <a href="{% url 'usability_trust_survey' %}" class="btn btn-success btn-lg" style="min-width:220px;">
+                <i class="fas fa-poll me-2"></i>
+                Take System Usability & Trust Survey
+            </a>
         </div>
     </div>
 </div>

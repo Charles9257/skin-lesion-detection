@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}System Usability and Trust Survey{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">System Usability and Trust Survey</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <ol>
+      {% for field in form.visible_fields %}
+        <li class="mb-3">
+          <label class="form-label fw-bold">{{ field.label_tag }}</label>
+          <div>{{ field }}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+            {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+    <button type="submit" class="btn btn-success">Submit Survey</button>
+  </form>
+</div>
+{% endblock %}

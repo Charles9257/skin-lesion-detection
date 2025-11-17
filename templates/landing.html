@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Welcome - Skin Lesion Detection AI{% endblock %}
+{% block extra_head %}
+<style>
+  .hero-section {
+    background: url('https://images.unsplash.com/photo-1511174511562-5f97f4f4e0c8?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: relative;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+  .hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(44,62,80,0.55);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2.5rem 1rem;
+  }
+  .hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+  .hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: #e0e6ed;
+  }
+  .cta-btns .btn {
+    font-size: 1.2rem;
+    padding: 0.9rem 2.2rem;
+    margin: 0.5rem 0.7rem;
+    border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(52,152,219,0.13);
+  }
+  .image-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2.5rem 0 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  .image-row img {
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(44,62,80,0.13);
+    width: 220px;
+    height: 160px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    background: #f8f9fa;
+  }
+  .trust-section {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin: 2rem auto 0 auto;
+    max-width: 900px;
+    box-shadow: 0 2px 12px rgba(52,152,219,0.07);
+  }
+  .trust-section h3 {
+    color: #2980b9;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .trust-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  .trust-section li {
+    font-size: 1.1rem;
+    color: #34495e;
+    padding-left: 1.7em;
+    position: relative;
+  }
+  .trust-section li:before {
+    content: "✔";
+    color: #27ae60;
+    position: absolute;
+    left: 0;
+    font-size: 1.2em;
+    top: 0.1em;
+  }
+  @media (max-width: 900px) {
+    .image-row img { width: 160px; height: 110px; }
+    .hero-content h1 { font-size: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .image-row { gap: 1rem; }
+    .image-row img { width: 110px; height: 70px; }
+    .hero-section { min-height: 260px; }
+    .trust-section { padding: 1rem 0.5rem; }
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 1100px;">
+  <!-- Hero Section -->
+  <div class="hero-section mb-4">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1><i class="fas fa-microscope me-2"></i> Bias-Aware & Explainable AI for Skin Lesion Detection</h1>
+      <p>Empowering research and clinical care with advanced, fair, and transparent AI-driven skin lesion analysis.<br>Join as a study participant or researcher.</p>
+      <div class="cta-btns">
+        <a href="/study/" class="btn btn-success btn-lg">
+          <i class="fas fa-user-graduate me-2"></i> Take a Study (Quick Participation)
+        </a>
+        <a href="/users/auth/?next=/users/dashboard/" class="btn btn-primary btn-lg">
+          <i class="fas fa-flask me-2"></i> Carry Out Full Research (Login Required)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Row: Skin Cancer, Testing, Treatment -->
+  <div class="image-row">
+    <!-- Skin Cancer Lesion -->
+    <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=400&q=80" alt="Skin cancer lesion" title="Skin cancer lesion (melanoma)">
+    <!-- Skin Cancer Testing (Dermatoscope/Diagnosis) -->
+    <img src="https://images.unsplash.com/photo-1513128034602-7814ccaddd4e?auto=format&fit=crop&w=400&q=80" alt="Skin cancer testing" title="Skin cancer testing with dermatoscope">
+    <!-- Skin Cancer Treatment (Doctor treating lesion) -->
+    <img src="https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=400&q=80" alt="Skin cancer treatment" title="Skin cancer treatment by dermatologist">
+  </div>
+
+  <!-- Trust/Features Section -->
+  <div class="trust-section text-center">
+    <h3><i class="fas fa-shield-alt me-2"></i> Why Choose This Platform?</h3>
+    <ul>
+      <li>Medical-grade AI for skin cancer detection</li>
+      <li>Bias-aware and fairness-audited predictions</li>
+      <li>Visual explanations (Grad-CAM, SHAP)</li>
+      <li>Secure, anonymous, and research-compliant</li>
+      <li>Trusted by clinicians and researchers</li>
+      <li>Open for both quick studies and full research</li>
+    </ul>
+    <p class="text-muted small">Your participation helps advance fairness and explainability in medical AI. All responses are anonymous and used for academic research only.</p>
+  </div>
+</div>
+{% endblock %}

@@ -3,8 +3,76 @@ from django.utils.html import format_html
 from django.db.models import Avg, Count
 from .models import (
     Feedback, DemographicProfile, UserStudySession,
-    ImageFeedback, SystemFeedback, ResearchConsent
+    ImageFeedback, SystemFeedback, ResearchConsent, UsabilityTrustSurvey
 )
+# --- Usability & Trust Survey Admin ---
+from django.db.models import Avg, Count
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import io, base64
+
+class UsabilityTrustSurveyAdmin(admin.ModelAdmin):
+    list_display = [
+        'user', 'submitted_at', 'q1_interface_intuitive', 'q2_layout_design_clear',
+        'q3_response_time_satisfactory', 'q10_overall_satisfaction', 'q11_recommend_system',
+        'display_short_answers'
+    ]
+    list_filter = [
+        'q1_interface_intuitive', 'q2_layout_design_clear', 'q3_response_time_satisfactory',
+        'q10_overall_satisfaction', 'q11_recommend_system', 'submitted_at'
+    ]
+    search_fields = ['user__username', 'most_helpful_feature', 'improvement_suggestion', 'noticed_limitations']
+    readonly_fields = ['survey_analytics']
+
+    def display_short_answers(self, obj):
+        return (obj.most_helpful_feature[:30] + '...') if obj.most_helpful_feature else ''
+    display_short_answers.short_description = 'Most Helpful Feature (Preview)'
+
+    def survey_analytics(self, obj=None):
+        # Show summary stats and a Likert bar chart for all responses
+        qs = UsabilityTrustSurvey.objects.all()
+        likert_fields = [
+            'q1_interface_intuitive', 'q2_layout_design_clear', 'q3_response_time_satisfactory',
+            'q4_steps_understandable', 'q5_results_clear', 'q6_visual_explanations_helpful',
+            'q7_fairness_metrics_understandable', 'q8_fair_predictions',
+            'q9_info_and_control_sufficient', 'q10_overall_satisfaction', 'q11_recommend_system'
+        ]
+        means = [qs.aggregate(avg=Avg(f))["avg"] or 0 for f in likert_fields]
+        labels = [f.replace('q','Q').replace('_',' ').capitalize() for f in likert_fields]
+        # Bar chart
+        fig, ax = plt.subplots(figsize=(8,4))
+        ax.barh(labels, means, color='#3498db')
+        ax.set_xlim(1,5)
+        ax.set_xlabel('Average Likert Score (1-5)')
+        ax.set_title('System Usability & Trust Survey Results')
+        plt.tight_layout()
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        plt.close(fig)
+        img_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+        # Metrics table
+        metrics = ''.join([
+            f'<tr><td><b>{labels[i]}</b></td><td>{means[i]:.2f}</td></tr>' for i in range(len(labels))
+        ])
+        # Qualitative answers
+        qual = qs.exclude(most_helpful_feature='').values_list('most_helpful_feature', flat=True)
+        qual_html = '<ul>' + ''.join([f'<li>{q}</li>' for q in qual]) + '</ul>' if qual else '<em>No responses yet.</em>'
+        return format_html(
+            '<div style="background:#f8f9fa;padding:15px;border-radius:8px;">'
+            '<h4>📊 Survey Analytics</h4>'
+            '<img src="data:image/png;base64,{}" style="max-width:100%;margin-bottom:1em;"/>'
+            '<table class="table table-sm"><thead><tr><th>Question</th><th>Avg Score</th></tr></thead><tbody>{}</tbody></table>'
+            '<h5>Most Helpful Features (Qualitative)</h5>{}'
+            '</div>',
+            img_b64, metrics, qual_html
+        )
+    survey_analytics.short_description = 'Survey Analytics (Charts & Metrics)'
+
+try:
+    admin.site.register(UsabilityTrustSurvey, UsabilityTrustSurveyAdmin)
+except admin.sites.AlreadyRegistered:
+    pass
 
 
 class FeedbackAdmin(admin.ModelAdmin):
